@@ -18,35 +18,52 @@ export default function StockPage() {
   const fetchStockIndices = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch("https://api.allorigins.win/get?url=" + encodeURIComponent("https://query1.finance.yahoo.com/v8/finance/chart/^KS11?interval=1d"));
-      const nRes = await fetch("https://api.allorigins.win/get?url=" + encodeURIComponent("https://query1.finance.yahoo.com/v8/finance/chart/^IXIC?interval=1d"));
+      // 코스피 지수 (^KS11) 및 나스닥 지수 (^IXIC) 호출
+      const res = await fetch("https://api.allorigins.win/get?url=" + encodeURIComponent("https://query1.finance.yahoo.com/v8/finance/chart/^KS11?interval=1d&range=1d"));
+      const nRes = await fetch("https://api.allorigins.win/get?url=" + encodeURIComponent("https://query1.finance.yahoo.com/v8/finance/chart/^IXIC?interval=1d&range=1d"));
       
       const kRaw = await res.json();
       const nRaw = await nRes.json();
+      
       const kData = JSON.parse(kRaw.contents);
       const nData = JSON.parse(nRaw.contents);
 
-      const kMeta = kData.chart.result[0].meta;
-      const nMeta = nData.chart.result[0].meta;
+      // 데이터 구조 존재 여부 체크 (데이터가 없을 경우 대비)
+      if (kData.chart?.result && nData.chart?.result) {
+        const kMeta = kData.chart.result[0].meta;
+        const nMeta = nData.chart.result[0].meta;
 
-      const kPrice = kMeta.regularMarketPrice || 0;
-      const kPrevClose = kMeta.previousClose || kPrice;
-      const nPrice = nMeta.regularMarketPrice || 0;
-      const nPrevClose = nMeta.previousClose || nPrice;
+        const kPrice = kMeta.regularMarketPrice;
+        const kPrevClose = kMeta.previousClose || kPrice;
+        const nPrice = nMeta.regularMarketPrice;
+        const nPrevClose = nMeta.previousClose || nPrice;
 
-      const kDiffValue = (kPrice - kPrevClose).toFixed(2);
-      const kRatioValue = ((parseFloat(kDiffValue) / kPrevClose) * 100).toFixed(2);
-      const nDiffValue = (nPrice - nPrevClose).toFixed(2);
-      const nRatioValue = ((parseFloat(nDiffValue) / nPrevClose) * 100).toFixed(2);
+        const kDiffValue = (kPrice - kPrevClose).toFixed(2);
+        const kRatioValue = ((parseFloat(kDiffValue) / kPrevClose) * 100).toFixed(2);
+        const nDiffValue = (nPrice - nPrevClose).toFixed(2);
+        const nRatioValue = ((parseFloat(nDiffValue) / nPrevClose) * 100).toFixed(2);
 
-      setIndices({
-        kospi: { price: kPrice.toLocaleString(), change: (parseFloat(kDiffValue) > 0 ? "+" : "") + kDiffValue, percent: (parseFloat(kRatioValue) > 0 ? "+" : "") + kRatioValue + "%", isUp: parseFloat(kDiffValue) >= 0 },
-        nasdaq: { price: nPrice.toLocaleString(), change: (parseFloat(nDiffValue) > 0 ? "+" : "") + nDiffValue, percent: (parseFloat(nRatioValue) > 0 ? "+" : "") + nRatioValue + "%", isUp: parseFloat(nDiffValue) >= 0 }
-      });
+        setIndices({
+          kospi: { 
+            price: kPrice.toLocaleString(undefined, { minimumFractionDigits: 2 }), 
+            change: (parseFloat(kDiffValue) > 0 ? "+" : "") + kDiffValue, 
+            percent: (parseFloat(kRatioValue) > 0 ? "+" : "") + kRatioValue + "%", 
+            isUp: parseFloat(kDiffValue) >= 0 
+          },
+          nasdaq: { 
+            price: nPrice.toLocaleString(undefined, { minimumFractionDigits: 2 }), 
+            change: (parseFloat(nDiffValue) > 0 ? "+" : "") + nDiffValue, 
+            percent: (parseFloat(nRatioValue) > 0 ? "+" : "") + nRatioValue + "%", 
+            isUp: parseFloat(nDiffValue) >= 0 
+          }
+        });
+      }
     } catch (error) {
       console.error("데이터 로드 실패:", error);
+      // 에러 시 기본값 유지 또는 알림
     } finally {
-      setTimeout(() => setIsLoading(false), 500);
+      // 최소 로딩 시간 부여로 자연스러운 UI 제공
+      setTimeout(() => setIsLoading(false), 800);
     }
   };
 
@@ -69,9 +86,9 @@ export default function StockPage() {
       <nav className="h-16 border-b bg-white flex items-center justify-between px-4 md:px-8 sticky top-0 z-50 shadow-sm">
         <Link href="/" className="font-black text-xl md:text-2xl text-blue-600 tracking-tighter">ECO_CHECK</Link>
         <div className="flex gap-5 md:gap-10 text-[14px] md:text-base font-black text-slate-900">
-          <Link href="/news" className="hover:text-blue-600">뉴스</Link>
+          <Link href="/news" className="hover:text-blue-600 transition">뉴스</Link>
           <Link href="/stock" className="text-blue-600">증권</Link>
-          <Link href="/dictionary" className="hover:text-blue-600">용어사전</Link>
+          <Link href="/dictionary" className="hover:text-blue-600 transition">용어사전</Link>
         </div>
       </nav>
 
@@ -80,7 +97,13 @@ export default function StockPage() {
           <h1 className="text-4xl md:text-5xl font-black text-slate-800 tracking-tight mb-4">Stock Market</h1>
           <p className="text-slate-500 font-medium text-sm md:text-base">전 세계 주요 지수를 실시간으로 연동하여 제공합니다.</p>
           <form onSubmit={handleSearch} className="relative mt-8 md:mt-10 max-w-2xl mx-auto md:mx-0">
-            <input type="text" placeholder="종목명 검색 (예: 삼성전자)" className="w-full h-16 md:h-18 px-6 md:px-8 rounded-full border-2 border-slate-200 focus:border-blue-500 focus:outline-none text-base md:text-lg font-medium shadow-lg bg-white" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+            <input 
+              type="text" 
+              placeholder="종목명 검색 (예: 삼성전자)" 
+              className="w-full h-16 md:h-18 px-6 md:px-8 rounded-full border-2 border-slate-200 focus:border-blue-500 focus:outline-none text-base md:text-lg font-medium shadow-lg bg-white" 
+              value={searchTerm} 
+              onChange={(e) => setSearchTerm(e.target.value)} 
+            />
             <button type="submit" className="absolute right-2 top-2 h-12 md:h-14 px-5 md:px-8 bg-blue-600 text-white rounded-full font-bold text-sm md:text-base">검색</button>
           </form>
         </header>
@@ -92,7 +115,9 @@ export default function StockPage() {
             <>
               <div className="p-8 md:p-10 bg-white rounded-[32px] md:rounded-[40px] shadow-xl border border-slate-200">
                 <div className="text-slate-400 text-[10px] md:text-xs font-black mb-4 uppercase tracking-widest font-mono">KOSPI INDEX</div>
-                <div className="text-5xl md:text-6xl font-black tracking-tighter text-slate-800">{indices.kospi.price}</div>
+                <div className="text-5xl md:text-6xl font-black tracking-tighter text-slate-800">
+                  {indices.kospi.price === "---" ? "데이터 오류" : indices.kospi.price}
+                </div>
                 <div className={`mt-4 font-bold text-lg md:text-xl flex items-center gap-2 ${indices.kospi.isUp ? 'text-red-500' : 'text-blue-600'}`}>
                   <span>{indices.kospi.isUp ? "▲" : "▼"} {indices.kospi.change}</span>
                   <span className="text-xs md:text-sm opacity-80">({indices.kospi.percent})</span>
@@ -100,7 +125,9 @@ export default function StockPage() {
               </div>
               <div className="p-8 md:p-10 bg-white rounded-[32px] md:rounded-[40px] shadow-xl border border-slate-200">
                 <div className="text-slate-400 text-[10px] md:text-xs font-black mb-4 uppercase tracking-widest font-mono">NASDAQ INDEX</div>
-                <div className="text-5xl md:text-6xl font-black tracking-tighter text-slate-800">{indices.nasdaq.price}</div>
+                <div className="text-5xl md:text-6xl font-black tracking-tighter text-slate-800">
+                  {indices.nasdaq.price === "---" ? "데이터 오류" : indices.nasdaq.price}
+                </div>
                 <div className={`mt-4 font-bold text-lg md:text-xl flex items-center gap-2 ${indices.nasdaq.isUp ? 'text-red-500' : 'text-blue-600'}`}>
                   <span>{indices.nasdaq.isUp ? "▲" : "▼"} {indices.nasdaq.change}</span>
                   <span className="text-xs md:text-sm opacity-80">({indices.nasdaq.percent})</span>
@@ -111,8 +138,8 @@ export default function StockPage() {
         </div>
 
         <div className="bg-white/50 p-6 md:p-8 rounded-[24px] md:rounded-[32px] border border-slate-200 mb-12">
-          <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">자주 찾는 종목</h3>
-          <div className="flex flex-wrap gap-2 md:gap-3">
+          <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6 text-center md:text-left">자주 찾는 종목</h3>
+          <div className="flex flex-wrap justify-center md:justify-start gap-2 md:gap-3">
             {["삼성전자", "SK하이닉스", "현대차","엔비디아", "테슬라", "애플", "마이크로소프트"].map((item) => (
               <button key={item} onClick={() => window.open(`https://search.naver.com/search.naver?query=${encodeURIComponent(item + " 주가")}`, "_blank")} className="px-4 md:px-6 py-2 md:py-3 bg-white border border-slate-200 rounded-full text-[12px] md:text-sm font-bold text-slate-600 hover:text-blue-600 transition shadow-sm">#{item}</button>
             ))}
