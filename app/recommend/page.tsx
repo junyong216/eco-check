@@ -126,7 +126,7 @@ function RecommendContent() {
           </button>
         </div>
 
-        {/* --- 전체 메뉴 드롭다운 --- */}
+        {/* --- 전체 메뉴 드롭다운 (수정됨: 추천 항목 추가) --- */}
         <div className={`fixed inset-x-0 top-16 transition-all duration-500 z-[250] overflow-hidden shadow-2xl ${isFullMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`}
              style={{ backgroundColor: "var(--card-bg)", borderBottom: "1px solid var(--border-color)" }}>
           <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 p-10 font-bold">
@@ -153,11 +153,22 @@ function RecommendContent() {
                 ))}
               </div>
             </div>
+            {/* 👈 추천 카테고리 추가됨 */}
+            <div>
+              <div className="text-red-600 text-xs mb-4 uppercase tracking-widest font-black">추천</div>
+              <div className="flex flex-col gap-3 text-[14px]">
+                {recommendTabs.map(tab => (
+                  <button key={tab.slug} onClick={() => { setActiveTab(tab.slug); setIsFullMenuOpen(false); }} className="text-left hover:text-red-600 transition-colors">
+                    {tab.name}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </nav>
 
-      {/* --- 메인 콘텐츠 (데이터 유지) --- */}
+      {/* --- 메인 콘텐츠 --- */}
       <main className="max-w-7xl mx-auto px-6 py-12 md:py-20 relative z-10">
         <header className="mb-16 text-center md:text-left px-2">
           <h1 className="text-5xl md:text-6xl font-black tracking-tight mb-6 italic" style={{ color: "var(--text-main)" }}>Bulls_Pick</h1>
