@@ -4,9 +4,9 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import DarkModeToggle from "@/components/DarkModeToggle";
-import AdSense from "@/components/AdSense"; // 👈 광고 컴포넌트 추가
+import AdSense from "@/components/AdSense";
 
-// --- 네비게이션용 공통 데이터 ---
+// --- 네비게이션용 데이터 ---
 const newsCategories = [
   { id: "market", name: "시장지표", query: "시장지표" },
   { id: "interest", name: "금리이슈", query: "금리전망" },
@@ -23,7 +23,7 @@ const recommendTabs = [
 
 function RecommendContent() {
   const [activeTab, setActiveTab] = useState("books");
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // 👈 메뉴 상태 복구
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -33,7 +33,7 @@ function RecommendContent() {
     }
   }, [searchParams]);
 
-  // ⚠️ 요청하신 대로 아래 데이터와 링크는 절대 수정하지 않았습니다.
+  // 데이터 유지
   const books = [
     { title: "돈의 속성", author: "김승호", desc: "최상위 부자가 말하는 돈에 대한 태도와 75가지 경제 철학을 담은 필독서입니다.", link: "https://product.kyobobook.co.kr/detail/S000001913217" },
     { title: "부자 아빠 가난한 아빠 1", author: "로버트 기요사키", desc: "자산과 부채의 차이를 명확히 하고 경제적 자유를 향한 로드맵을 제시합니다.", link: "https://product.kyobobook.co.kr/detail/S000001772245" },
@@ -55,7 +55,7 @@ function RecommendContent() {
   return (
     <div className="min-h-screen font-sans overflow-x-hidden transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
       
-      {/* 네비게이션 */}
+      {/* 🚀 복구된 네비게이션 */}
       <nav className="h-16 border-b flex items-center justify-between px-4 md:px-8 sticky top-0 z-[100] shadow-sm transition-colors" 
            style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
         
@@ -65,11 +65,11 @@ function RecommendContent() {
         </div>
 
         <div className="flex items-center h-full gap-4 md:gap-8 font-black text-base">
-          <div className="hidden lg:flex gap-6 h-full">
-            <Link href="/news" className="hover:text-red-600 transition flex items-center">뉴스</Link>
-            <Link href="/stock" className="hover:text-red-600 transition flex items-center">증권</Link>
-            <Link href="/dictionary" className="hover:text-red-600 transition flex items-center">용어사전</Link>
-            <Link href="/recommend" className="text-red-600 flex items-center">추천</Link>
+          <div className="hidden lg:flex gap-6 h-full items-center">
+            <Link href="/news" className="hover:text-red-600 transition">뉴스</Link>
+            <Link href="/stock" className="hover:text-red-600 transition">증권</Link>
+            <Link href="/dictionary" className="hover:text-red-600 transition">용어사전</Link>
+            <Link href="/recommend" className="text-red-600 transition">추천</Link>
           </div>
 
           <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="w-10 h-10 flex flex-col justify-center items-center gap-1.5 focus:outline-none z-[120]">
@@ -79,8 +79,8 @@ function RecommendContent() {
           </button>
         </div>
         
-        {/* 모바일/전체 메뉴 레이어 */}
-        <div className={`absolute left-0 w-full transition-all duration-500 ease-in-out overflow-hidden shadow-2xl z-[90] ${isMenuOpen ? 'max-h-[100vh] border-b opacity-100' : 'max-h-0 opacity-0'}`}
+        {/* 모바일/전체 메뉴 레이어 (복구) */}
+        <div className={`fixed left-0 w-full transition-all duration-500 ease-in-out overflow-hidden shadow-2xl z-[90] ${isMenuOpen ? 'max-h-[100vh] border-b opacity-100' : 'max-h-0 opacity-0'}`}
              style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", top: '64px' }}>
           <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 p-10 font-bold">
             <div>
@@ -110,7 +110,7 @@ function RecommendContent() {
               <div className="text-red-600 text-xs mb-4 uppercase tracking-widest font-black">추천</div>
               <div className="flex flex-col gap-3 text-[14px]">
                 {recommendTabs.map((tab) => (
-                  <Link key={tab.slug} href={`/recommend?tab=${tab.slug}`} onClick={() => setIsMenuOpen(false)}>{tab.name}</Link>
+                  <button key={tab.slug} onClick={() => { setActiveTab(tab.slug); setIsMenuOpen(false); }} className="text-left">{tab.name}</button>
                 ))}
               </div>
             </div>
@@ -118,6 +118,7 @@ function RecommendContent() {
         </div>
       </nav>
 
+      {/* 메인 콘텐츠 영역 */}
       <main className="max-w-7xl mx-auto px-6 py-12 md:py-20">
         <header className="mb-16 text-center md:text-left px-2">
           <h1 className="text-5xl md:text-6xl font-black tracking-tight mb-6 italic" style={{ color: "var(--text-main)" }}>Bulls_Pick</h1>
@@ -135,9 +136,8 @@ function RecommendContent() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {(activeTab === "books" ? books : videos).map((item, i) => (
-            <>
+            <div key={i} className="flex flex-col h-full">
               <a 
-                key={i} 
                 href={item.link} 
                 target="_blank" 
                 rel="noopener noreferrer" 
@@ -160,13 +160,13 @@ function RecommendContent() {
                 </div>
               </a>
 
-              {/* 📢 카드 3개마다 광고 삽입 (데스크톱 기준 한 줄 끝난 후) */}
+              {/* 📢 카드 3개마다 광고 삽입 */}
               {(i + 1) % 3 === 0 && (
-                <div className="col-span-1 md:col-span-2 lg:col-span-3 my-4">
+                <div className="col-span-1 md:col-span-2 lg:col-span-3 mt-8">
                   <AdSense slot="1122334455" format="fluid" />
                 </div>
               )}
-            </>
+            </div>
           ))}
         </div>
 
