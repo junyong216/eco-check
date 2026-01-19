@@ -190,7 +190,7 @@ export default function Home() {
         >
           <div className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-105"
             style={{ 
-              backgroundImage: `url('/images/hero-bg.png')`,
+              backgroundImage: `url('/hero-bg.png')`,
               filter: "blur(4px) brightness(0.4)" 
             }} />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20"></div>
