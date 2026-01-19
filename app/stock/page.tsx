@@ -311,7 +311,7 @@ function StockContent() {
         </div>
 
         <div className="text-center mt-20 pb-12">
-          <Link href="/" className="inline-block px-14 py-6 bg-red-600 text-white rounded-2xl font-black text-xl hover:bg-red-700 transition shadow-2xl hover:-translate-y-1">GO BACK HOME</Link>
+          <Link href="/" className="inline-block px-12 py-5 bg-red-600 text-white rounded-full font-black text-lg hover:bg-red-700 transition shadow-xl">홈으로 돌아가기</Link>
         </div>
       </main>
 
