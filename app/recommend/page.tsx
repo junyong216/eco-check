@@ -6,7 +6,6 @@ import Link from "next/link";
 import DarkModeToggle from "@/components/DarkModeToggle";
 import AdSense from "@/components/AdSense";
 
-// --- 네비게이션용 데이터 ---
 const newsCategories = [
   { id: "market", name: "시장지표", query: "시장지표" },
   { id: "interest", name: "금리이슈", query: "금리전망" },
@@ -23,7 +22,7 @@ const recommendTabs = [
 
 function RecommendContent() {
   const [activeTab, setActiveTab] = useState("books");
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // 👈 메뉴 상태 복구
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -33,7 +32,6 @@ function RecommendContent() {
     }
   }, [searchParams]);
 
-  // 데이터 유지
   const books = [
     { title: "돈의 속성", author: "김승호", desc: "최상위 부자가 말하는 돈에 대한 태도와 75가지 경제 철학을 담은 필독서입니다.", link: "https://product.kyobobook.co.kr/detail/S000001913217" },
     { title: "부자 아빠 가난한 아빠 1", author: "로버트 기요사키", desc: "자산과 부채의 차이를 명확히 하고 경제적 자유를 향한 로드맵을 제시합니다.", link: "https://product.kyobobook.co.kr/detail/S000001772245" },
@@ -53,10 +51,10 @@ function RecommendContent() {
   ];
 
   return (
-    <div className="min-h-screen font-sans overflow-x-hidden transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
+    <div className="min-h-screen font-sans transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
       
-      {/* 🚀 복구된 네비게이션 */}
-      <nav className="h-16 border-b flex items-center justify-between px-4 md:px-8 sticky top-0 z-[100] shadow-sm transition-colors" 
+      {/* --- 네비게이션 상단바 --- */}
+      <nav className="h-16 border-b flex items-center justify-between px-4 md:px-8 sticky top-0 z-[200] transition-colors" 
            style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
         
         <div className="flex items-center gap-4">
@@ -64,45 +62,36 @@ function RecommendContent() {
           <DarkModeToggle />
         </div>
 
-        <div className="flex items-center h-full gap-4 md:gap-8 font-black text-base">
-          <div className="hidden lg:flex gap-6 h-full items-center">
-            <Link href="/news" className="hover:text-red-600 transition">뉴스</Link>
-            <Link href="/stock" className="hover:text-red-600 transition">증권</Link>
-            <Link href="/dictionary" className="hover:text-red-600 transition">용어사전</Link>
-            <Link href="/recommend" className="text-red-600 transition">추천</Link>
-          </div>
-
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="w-10 h-10 flex flex-col justify-center items-center gap-1.5 focus:outline-none z-[120]">
-            <div className={`w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
-            <div className={`w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
-            <div className={`w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
-          </button>
-        </div>
+        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="w-10 h-10 flex flex-col justify-center items-center gap-1.5 focus:outline-none relative z-[210]">
+          <div className={`w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
+          <div className={`w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
+          <div className={`w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
+        </button>
         
-        {/* 모바일/전체 메뉴 레이어 (복구) */}
-        <div className={`fixed left-0 w-full transition-all duration-500 ease-in-out overflow-hidden shadow-2xl z-[90] ${isMenuOpen ? 'max-h-[100vh] border-b opacity-100' : 'max-h-0 opacity-0'}`}
-             style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", top: '64px' }}>
+        {/* --- 📢 드롭다운 메뉴 레이어 (수정됨) --- */}
+        <div className={`fixed inset-x-0 top-16 transition-all duration-500 ease-in-out z-[190] overflow-hidden shadow-2xl ${isMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`}
+             style={{ backgroundColor: "var(--card-bg)", borderBottom: "1px solid var(--border-color)" }}>
           <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 p-10 font-bold">
             <div>
               <div className="text-red-600 text-xs mb-4 uppercase tracking-widest font-black">뉴스</div>
               <div className="flex flex-col gap-3">
                 {newsCategories.map((cat) => (
-                  <a key={cat.id} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}`} target="_blank" className="text-[14px]" style={{ color: "var(--text-main)" }}>{cat.name}</a>
+                  <a key={cat.id} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}`} target="_blank" className="text-[14px] hover:text-red-600 transition" style={{ color: "var(--text-main)" }}>{cat.name}</a>
                 ))}
               </div>
             </div>
             <div>
               <div className="text-red-600 text-xs mb-4 uppercase tracking-widest font-black">증권</div>
               <div className="flex flex-col gap-3 text-[14px]">
-                <Link href="/stock?tab=list" onClick={() => setIsMenuOpen(false)}>증권사 목록</Link>
-                <Link href="/stock?tab=guide" onClick={() => setIsMenuOpen(false)}>계좌 가이드</Link>
+                <Link href="/stock?tab=list" onClick={() => setIsMenuOpen(false)} className="hover:text-red-600 transition">증권사 목록</Link>
+                <Link href="/stock?tab=guide" onClick={() => setIsMenuOpen(false)} className="hover:text-red-600 transition">계좌 가이드</Link>
               </div>
             </div>
             <div>
               <div className="text-red-600 text-xs mb-4 uppercase tracking-widest font-black">용어사전</div>
               <div className="flex flex-col gap-3 text-[14px]">
                 {dictCategories.map((cat) => (
-                  <Link key={cat} href={`/dictionary?cat=${cat}`} onClick={() => setIsMenuOpen(false)}>{cat}</Link>
+                  <Link key={cat} href={`/dictionary?cat=${cat}`} onClick={() => setIsMenuOpen(false)} className="hover:text-red-600 transition">{cat}</Link>
                 ))}
               </div>
             </div>
@@ -110,7 +99,7 @@ function RecommendContent() {
               <div className="text-red-600 text-xs mb-4 uppercase tracking-widest font-black">추천</div>
               <div className="flex flex-col gap-3 text-[14px]">
                 {recommendTabs.map((tab) => (
-                  <button key={tab.slug} onClick={() => { setActiveTab(tab.slug); setIsMenuOpen(false); }} className="text-left">{tab.name}</button>
+                  <button key={tab.slug} onClick={() => { setActiveTab(tab.slug); setIsMenuOpen(false); }} className="text-left hover:text-red-600 transition">{tab.name}</button>
                 ))}
               </div>
             </div>
@@ -118,8 +107,7 @@ function RecommendContent() {
         </div>
       </nav>
 
-      {/* 메인 콘텐츠 영역 */}
-      <main className="max-w-7xl mx-auto px-6 py-12 md:py-20">
+      <main className="max-w-7xl mx-auto px-6 py-12 md:py-20 relative z-10">
         <header className="mb-16 text-center md:text-left px-2">
           <h1 className="text-5xl md:text-6xl font-black tracking-tight mb-6 italic" style={{ color: "var(--text-main)" }}>Bulls_Pick</h1>
           <p className="text-lg font-bold mb-10 opacity-70" style={{ color: "var(--text-sub)" }}>당신의 인사이트를 완성할 베스트 도서와 인기 영상을 큐레이션했습니다.</p>
@@ -129,7 +117,7 @@ function RecommendContent() {
           </div>
         </header>
 
-        {/* 📢 상단 광고 배너 */}
+        {/* 광고 영역 */}
         <div className="mb-16">
           <AdSense slot="5544332211" format="auto" />
         </div>
@@ -137,13 +125,9 @@ function RecommendContent() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {(activeTab === "books" ? books : videos).map((item, i) => (
             <div key={i} className="flex flex-col h-full">
-              <a 
-                href={item.link} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="p-10 rounded-[40px] border shadow-sm hover:shadow-2xl hover:border-red-500 transition-all group flex flex-col justify-between h-full min-h-[360px]" 
-                style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}
-              >
+              <a href={item.link} target="_blank" rel="noopener noreferrer" 
+                 className="p-10 rounded-[40px] border shadow-sm hover:shadow-2xl hover:border-red-500 transition-all group flex flex-col justify-between h-full min-h-[360px]" 
+                 style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
                 <div>
                   <div className="flex justify-between items-start mb-6">
                     <span className="text-[11px] font-black text-red-600 uppercase tracking-[0.2em]">{"author" in item ? "KYOBO BEST" : "YOUTUBE CHANNEL"}</span>
@@ -159,10 +143,8 @@ function RecommendContent() {
                   <span className="text-[12px] font-black group-hover:text-red-600 transition uppercase tracking-tighter" style={{ color: "var(--text-sub)" }}>컨텐츠 보러가기 →</span>
                 </div>
               </a>
-
-              {/* 📢 카드 3개마다 광고 삽입 */}
               {(i + 1) % 3 === 0 && (
-                <div className="col-span-1 md:col-span-2 lg:col-span-3 mt-8">
+                <div className="mt-8">
                   <AdSense slot="1122334455" format="fluid" />
                 </div>
               )}
