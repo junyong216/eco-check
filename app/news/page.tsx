@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react"; // 햄버거 메뉴 상태 관리를 위해 추가
+import { useState } from "react";
 import Link from "next/link";
 import DarkModeToggle from "@/components/DarkModeToggle";
 
@@ -22,12 +22,12 @@ const recommendTabs = [
 ];
 
 export default function NewsPage() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // 햄버거 메뉴 상태
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <div className="min-h-screen font-sans overflow-x-hidden transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
       
-      {/* --- 상단 네비게이션 (다른 페이지와 100% 동일 구조) --- */}
+      {/* --- 상단 네비게이션 --- */}
       <nav className="h-16 border-b flex items-center justify-between px-4 md:px-8 sticky top-0 z-[100] shadow-sm transition-colors" 
            style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
         
@@ -80,7 +80,6 @@ export default function NewsPage() {
             </div>
           </div>
 
-          {/* 햄버거 토글 버튼 */}
           <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="w-10 h-10 flex flex-col justify-center items-center gap-1.5 focus:outline-none z-[120]">
             <div className={`w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
             <div className={`w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
@@ -158,11 +157,29 @@ export default function NewsPage() {
           ))}
         </div>
 
-        <div className="text-center mt-20 pb-12">
+        {/* --- 애드센스 승인용 정보성 콘텐츠 --- */}
+        <section className="mt-32 pt-20 border-t" style={{ borderColor: "var(--border-color)" }}>
+          <h2 className="text-3xl font-black mb-10 tracking-tight" style={{ color: "var(--text-main)" }}>💡 필수 경제 지표 가이드</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-base leading-relaxed" style={{ color: "var(--text-sub)" }}>
+            <div className="space-y-4">
+              <h3 className="text-xl font-bold" style={{ color: "var(--text-main)" }}>1. 금리가 우리 삶에 주는 영향</h3>
+              <p>중앙은행이 결정하는 기준금리는 모든 경제 활동의 출발점입니다. 금리가 인상되면 대출 비용이 증가하여 과열된 경기를 진정시키는 효과가 있지만 가계 소비는 줄어들 수 있습니다.</p>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-xl font-bold" style={{ color: "var(--text-main)" }}>2. 인플레이션과 환율의 관계</h3>
+              <p>물가가 오르는 인플레이션 상황에서는 화폐 가치가 변동합니다. 특히 한국처럼 수출입 비중이 큰 나라는 환율의 흐름을 파악하는 것이 투자에 있어 가장 기본입니다.</p>
+            </div>
+          </div>
+        </section>
+
+        <div className="text-center mt-24 pb-12">
           <Link href="/" className="inline-block px-12 py-5 bg-slate-800 text-white rounded-full font-black text-lg hover:bg-slate-900 transition shadow-xl">홈으로 돌아가기</Link>
         </div>
       </main>
-      <footer className="py-12 text-center text-[10px] font-bold tracking-widest border-t uppercase" style={{ color: "var(--text-sub)", borderColor: "var(--border-color)" }}>© 2026 ECO_CHECK. ALL RIGHTS RESERVED.</footer>
+
+      <footer className="py-12 text-center text-[10px] font-bold tracking-widest border-t uppercase" style={{ color: "var(--text-sub)", borderColor: "var(--border-color)" }}>
+        © 2026 ECO_CHECK. ALL RIGHTS RESERVED.
+      </footer>
     </div>
   );
 }
