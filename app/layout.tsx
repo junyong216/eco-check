@@ -30,6 +30,10 @@ export default function RootLayout({
   return (
     <html lang="ko" suppressHydrationWarning>
       <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#2563eb" />
+        <link rel="apple-touch-icon" href="/icon-192x192.png" />
+        
         {/* 구글 애드센스 스크립트 추가 */}
         <script 
           async 
