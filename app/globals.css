@@ -2,12 +2,12 @@
 
 /* 1. 변수 정의 및 기본 스타일 */
 :root {
-  --bg-color: #F1F5F9;
+  --bg-color: #F8FAFC;    /* 조금 더 맑은 느낌의 연회색 */
   --card-bg: #ffffff;
   --text-main: #0F172A;
   --text-sub: #64748B;
   --border-color: #E2E8F0;
-  --accent-color: #2563EB;
+  --accent-color: #e11d48; /* 불스아이 레드 (Rose 600) */
 }
 
 /* 2. 다크 모드 변수 */
@@ -17,18 +17,17 @@ html.dark {
   --text-main: #F8FAFC;
   --text-sub: #94A3B8;
   --border-color: #334155;
-  --accent-color: #3B82F6;
+  --accent-color: #fb7185; /* 다크모드용 밝은 레드 (Rose 400) */
 }
 
-/* 3. 상단바 겹침 방지 및 기본 설정 */
+/* 3. 기본 설정 */
 body {
   background-color: var(--bg-color);
   color: var(--text-main);
   margin: 0;
   
-  /* [중요] 기기 상단바 높이를 계산하여 여백 추가 */
-  /* env(safe-area-inset-top)이 0인 기기를 위해 최소 16px의 여백을 줌 */
-  padding-top: calc(env(safe-area-inset-top) + 16px);
+  /* 기기 상단바 및 하단바 영역 보호 (모바일 앱 필수) */
+  padding-top: env(safe-area-inset-top);
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
   padding-bottom: env(safe-area-inset-bottom);
@@ -48,7 +47,17 @@ body {
   color: var(--text-sub); 
 }
 
+/* 강조 텍스트용 */
+.text-accent {
+  color: var(--accent-color);
+}
+
 /* 헤더나 네비게이션이 별도로 있다면 추가 여백 방지 */
 header, nav {
   margin-top: 0;
+}
+
+/* 모바일 앱 터치 시 파란 박스 생기는 것 방지 */
+* {
+  -webkit-tap-highlight-color: transparent;
 }
