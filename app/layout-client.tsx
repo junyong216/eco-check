@@ -8,6 +8,17 @@ import "./globals.css";
 function AppHandler() {
   useEffect(() => {
     const init = async () => {
+      // --- [추가] 서비스 워커 등록 (PWA 설치 팝업 활성화) ---
+      if (typeof window !== "undefined" && "serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("/sw.js")
+            .then((reg) => console.log("Service Worker registered"))
+            .catch((err) => console.log("Service Worker registration failed", err));
+        });
+      }
+
+      // --- [기존] Capacitor 뒤로가기 로직 ---
       try {
         await App.addListener('backButton', ({ canGoBack }) => {
           if (canGoBack) {
