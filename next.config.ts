@@ -1,9 +1,18 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  output: 'export',         // 정적 HTML 빌드를 활성화합니다.
-  images: { 
-    unoptimized: true       // 앱 환경에서는 Next.js 이미지 최적화 서버를 쓸 수 없으므로 true로 설정합니다.
+import type { NextConfig } from "next";
+const withPWA = require("next-pwa")({
+  dest: "public",
+  disable: process.env.NODE_ENV === "development",
+  register: true,
+  skipWaiting: true,
+  buildExcludes: [/middleware-manifest\.json$/],
+});
+
+const nextConfig: NextConfig = {
+  output: "export",
+  images: {
+    unoptimized: true,
   },
+  reactStrictMode: false,
 };
 
-export default nextConfig;
+export default withPWA(nextConfig);
