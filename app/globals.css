@@ -5,20 +5,20 @@
   --bg-color: #F8FAFC;    /* 조금 더 맑은 느낌의 연회색 */
   --card-bg: #ffffff;
   --text-main: #0F172A;
-  --text-sub: #64748B;
+  --text-sub: #475569;    /* 가독성을 위해 살짝 더 진하게 조정 */
   --border-color: #E2E8F0;
-  --accent-color: #e11d48; /* 불스아이 레드 (Rose 600) */
-  --ad-bg: #f1f5f9;       /* 광고 로딩 전 배경색 */
+  --accent-color: #e11d48; /* 불스아이 레드 */
+  --ad-bg: #f1f5f9;
 }
 
 /* 2. 다크 모드 변수 */
 html.dark {
   --bg-color: #0F172A;
   --card-bg: #1E293B;
-  --text-main: #F8FAFC;
-  --text-sub: #94A3B8;
+  --text-main: #F1F5F9;
+  --text-sub: #CBD5E1;    /* 다크모드에서 더 잘 보이도록 밝게 조정 */
   --border-color: #334155;
-  --accent-color: #fb7185; /* 다크모드용 밝은 레드 (Rose 400) */
+  --accent-color: #fb7185;
   --ad-bg: #1e293b;
 }
 
@@ -28,72 +28,58 @@ body {
   color: var(--text-main);
   margin: 0;
   
-  /* 기기 상단바 및 하단바 영역 보호 (모바일 앱 필수) */
-  padding-top: env(safe-area-inset-top);
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
-  padding-bottom: env(safe-area-inset-bottom);
+  /* Safe Area 보호 */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 
   transition: background-color 0.3s, color 0.3s;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   
-  /* 폰트 설정 (기본 샌즈세리프) */
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  
+  /* 한글 줄바꿈 최적화 */
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 /* 4. 유틸리티 클래스 */
 .theme-card { 
   background-color: var(--card-bg); 
   border: 1px solid var(--border-color);
+  border-radius: 1rem; /* 공통 곡률 추가 제안 */
   transition: all 0.2s ease-in-out;
 }
 
-.theme-text-sub { 
-  color: var(--text-sub); 
+/* 이미지나 카드에 호버 시 미세한 그림자 효과 (불스아이 스타일) */
+.theme-card:hover {
+  border-color: var(--accent-color);
+  box-shadow: 0 10px 30px -10px rgba(225, 29, 72, 0.1);
 }
 
-.text-accent {
-  color: var(--accent-color);
-}
-
-/* 5. 애드센스 광고 컨테이너 스타일 */
+/* 5. 애드센스 광고 컨테이너 */
 ins.adsbygoogle {
   background-color: var(--ad-bg);
   border-radius: 12px;
   overflow: hidden;
-  margin: 20px 0;
+  margin: 24px 0;
   display: block;
+  min-height: 100px; /* 최소 높이 설정으로 깜빡임 방지 */
 }
 
-/* 6. 스크롤바 커스텀 (브랜드 아이덴티티 반영) */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--bg-color);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-color);
-}
-
-/* 헤더나 네비게이션 여백 방지 */
-header, nav {
-  margin-top: 0;
-}
-
-/* 모바일 앱 터치 시 파란 박스 방지 및 인터랙션 최적화 */
+/* 6. 인터랙션 최적화 */
 * {
   -webkit-tap-highlight-color: transparent;
   box-sizing: border-box;
 }
 
-/* 버튼 클릭 시 미세한 반응 */
-button:active {
-  transform: scale(0.98);
+/* 버튼 및 링크 클릭 반응 */
+button:active, a:active {
+  transform: scale(0.96);
   transition: transform 0.1s;
+}
+
+/* 이미지 드래그 방지 (앱 느낌 강조) */
+img {
+  -webkit-user-drag: none;
+  user-select: none;
 }

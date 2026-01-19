@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion"; // AnimatePresence 추가
 import DarkModeToggle from "@/components/DarkModeToggle";
 import AdSense from "@/components/AdSense";
 
@@ -41,7 +41,7 @@ const staggerContainer = {
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null); // 개별 드롭다운 상태 추가
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [exchangeRate, setExchangeRate] = useState({ rate: "---", change: "+0.0" });
@@ -160,32 +160,42 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* --- 모바일/전체 메뉴 레이어 --- */}
-      <div className={`fixed inset-x-0 transition-all duration-500 ease-in-out overflow-hidden shadow-2xl z-[250] ${isMenuOpen ? 'max-h-screen border-b opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`}
-           style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", top: '64px' }}>
-        <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 p-10">
-          {Object.entries(menuData).map(([key, items]) => (
-            <div key={key}>
-              <div className="text-red-600 font-black text-xs mb-4 uppercase tracking-widest">
-                {key === 'news' ? '뉴스' : key === 'stock' ? '증권' : key === 'dict' ? '용어사전' : '추천'}
-              </div>
-              <div className="flex flex-col gap-3">
-                {items.map((item: any) => {
-                  const label = typeof item === 'string' ? item : item.name;
-                  const href = typeof item === 'string' ? `/dictionary?cat=${item}` : item.href;
-                  const isExternal = typeof item !== 'string' && !item.href;
-                  
-                  return isExternal ? (
-                    <a key={label} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(item.query)}`} target="_blank" className="text-[14px] font-bold hover:text-red-600 transition-colors" style={{ color: "var(--text-main)" }}>{label}</a>
-                  ) : (
-                    <Link key={label} href={href} onClick={() => setIsMenuOpen(false)} className="text-[14px] font-bold hover:text-red-600 transition-colors" style={{ color: "var(--text-main)" }}>{label}</Link>
-                  );
-                })}
-              </div>
+      {/* --- 모바일/전체 메뉴 레이어 (수정됨: 애니메이션 적용) --- */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div 
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }} // 부드러운 하강 효과
+            className="fixed inset-x-0 overflow-hidden shadow-2xl z-[250] border-b"
+            style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", top: '64px' }}
+          >
+            <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 p-10">
+              {Object.entries(menuData).map(([key, items]) => (
+                <div key={key}>
+                  <div className="text-red-600 font-black text-xs mb-4 uppercase tracking-widest">
+                    {key === 'news' ? '뉴스' : key === 'stock' ? '증권' : key === 'dict' ? '용어사전' : '추천'}
+                  </div>
+                  <div className="flex flex-col gap-3">
+                    {items.map((item: any) => {
+                      const label = typeof item === 'string' ? item : item.name;
+                      const href = typeof item === 'string' ? `/dictionary?cat=${item}` : item.href;
+                      const isExternal = typeof item !== 'string' && !item.href;
+                      
+                      return isExternal ? (
+                        <a key={label} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(item.query)}`} target="_blank" className="text-[14px] font-bold hover:text-red-600 transition-colors" style={{ color: "var(--text-main)" }}>{label}</a>
+                      ) : (
+                        <Link key={label} href={href} onClick={() => setIsMenuOpen(false)} className="text-[14px] font-bold hover:text-red-600 transition-colors" style={{ color: "var(--text-main)" }}>{label}</Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <main className="max-w-6xl mx-auto px-4 py-8 md:py-24 relative z-10">
         {/* 히어로 섹션 */}
@@ -280,7 +290,7 @@ export default function Home() {
         <AdSense slot="0987654321" />
       </main>
       
-      {/* 푸터 및 워런버핏 명언 생략 없이 유지 */}
+      {/* 푸터 및 워런버핏 명언 */}
       <motion.section variants={fadeInUp} initial="initial" whileInView="whileInView" className="py-24 md:py-32 border-y-2 text-center relative overflow-hidden" style={{ borderColor: "var(--border-color)" }}>
         <div className="absolute top-0 left-1/2 -translate-x-1/2 text-[15rem] font-black opacity-[0.02] italic select-none pointer-events-none uppercase">Patience</div>
         <p className="relative z-10 text-xl md:text-5xl font-black leading-[1.3] mb-8 px-6 italic tracking-tighter" style={{ color: "var(--text-main)" }}>

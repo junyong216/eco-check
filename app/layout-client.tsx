@@ -1,69 +1,140 @@
 "use client";
 
-import { useEffect } from "react";
-import { App } from "@capacitor/app";
+import { useState } from "react";
 import Link from "next/link";
-import "./globals.css";
+import { motion, AnimatePresence } from "framer-motion";
+import DarkModeToggle from "@/components/DarkModeToggle";
 
-function AppHandler() {
-  useEffect(() => {
-    const init = async () => {
-      // --- [추가] 서비스 워커 등록 (PWA 설치 팝업 활성화) ---
-      if (typeof window !== "undefined" && "serviceWorker" in navigator) {
-        window.addEventListener("load", () => {
-          navigator.serviceWorker
-            .register("/sw.js")
-            .then((reg) => console.log("Service Worker registered"))
-            .catch((err) => console.log("Service Worker registration failed", err));
-        });
-      }
-
-      // --- [기존] Capacitor 뒤로가기 로직 ---
-      try {
-        await App.addListener('backButton', ({ canGoBack }) => {
-          if (canGoBack) {
-            window.history.back();
-          } else {
-            App.exitApp();
-          }
-        });
-      } catch (e) {
-        console.log("Web environment: Capacitor not detected.");
-      }
-    };
-    init();
-    return () => { App.removeAllListeners(); };
-  }, []);
-  return null;
+// --- 타입 정의 ---
+interface MenuItem {
+  name: string;
+  href?: string;
+  query?: string;
 }
 
-export default function ClientLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <body className="antialiased transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
-      <AppHandler />
-      <div className="min-h-screen flex flex-col">
-        <main className="flex-grow">
-          {children}
-        </main>
+interface MenuData {
+  news: MenuItem[];
+  stock: MenuItem[];
+  dict: string[]; // 사전은 문자열 배열
+  recommend: MenuItem[];
+}
 
-        <footer className="p-10 text-center opacity-50 text-[10px] font-bold tracking-widest uppercase border-t" style={{ borderColor: "var(--border-color)", backgroundColor: "var(--card-bg)" }}>
-          <div className="max-w-6xl mx-auto">
-            <p className="mb-4">© 2026 BULL'S EYE. ALL RIGHTS RESERVED.</p>
-            <div className="flex justify-center gap-6 items-center">
-              <Link href="/privacy" className="underline hover:text-red-600 transition">
-                개인정보처리방침
-              </Link>
-              <Link href="/terms" className="underline hover:text-red-600 transition">
-                이용약관
-              </Link>
-            </div>
+// --- 데이터 (export를 붙여서 어디서든 접근 가능하게 하거나, 컴포넌트 바로 위에 배치) ---
+const menuData: MenuData = {
+  news: [
+    { name: "시장지표", query: "시장지표" },
+    { name: "금리이슈", query: "금리전망" },
+    { name: "주식뉴스", query: "주식시황" },
+    { name: "가상자산", query: "비트코인" },
+    { name: "부동산", query: "부동산전망" },
+    { name: "해외경제", query: "글로벌경제" },
+  ],
+  stock: [
+    { name: "증권사 목록", href: "/stock?tab=list" },
+    { name: "계좌 가이드", href: "/stock?tab=guide" },
+  ],
+  dict: ["전체", "주식기초", "재무제표", "거시경제", "투자전략"],
+  recommend: [
+    { name: "추천 도서", href: "/recommend?tab=books" },
+    { name: "추천 영상", href: "/recommend?tab=videos" },
+  ]
+};
+
+export default function ClientLayout({ children }: { children: React.ReactNode }) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+
+  return (
+    <div className="flex flex-col min-h-screen transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
+      <nav className="h-16 border-b flex items-center justify-between px-4 md:px-8 sticky top-0 z-[300] shadow-sm" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+        <div className="flex items-center gap-4">
+          <Link href="/" className="font-black text-xl md:text-2xl text-red-600 tracking-tighter italic">BULL'S EYE</Link>
+          <DarkModeToggle />
+        </div>
+
+        <div className="flex items-center h-full gap-6 font-black text-[14px]">
+          {/* 데스크탑 메뉴 */}
+          <div className="hidden lg:flex gap-6 h-full">
+            {(Object.keys(menuData) as Array<keyof MenuData>).map((key) => (
+              <div key={key} className="relative flex items-center h-full px-2" onMouseEnter={() => setOpenDropdown(key)} onMouseLeave={() => setOpenDropdown(null)}>
+                <span className="cursor-pointer hover:text-red-600 uppercase transition-colors">
+                  {key === 'news' ? '뉴스' : key === 'stock' ? '증권' : key === 'dict' ? '사전' : '추천'}
+                </span>
+                <AnimatePresence>
+                  {openDropdown === key && (
+                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 5 }} className="absolute top-full left-1/2 -translate-x-1/2 pt-2">
+                      <div className="w-40 rounded-2xl border shadow-2xl p-2 bg-[var(--card-bg)]" style={{ borderColor: "var(--border-color)" }}>
+                        {(menuData[key] as any[]).map((item: any) => {
+                          const label = typeof item === 'string' ? item : item.name;
+                          const href = typeof item === 'string' ? `/dictionary?cat=${item}` : item.href;
+                          return item.query ? (
+                            <a key={label} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(item.query)}`} target="_blank" className="block px-4 py-2 rounded-xl text-[13px] hover:text-red-600 transition" style={{ color: "var(--text-main)" }}>{label}</a>
+                          ) : (
+                            <Link key={label} href={href || "/"} className="block px-4 py-2 rounded-xl text-[13px] hover:text-red-600 transition" style={{ color: "var(--text-main)" }}>{label}</Link>
+                          );
+                        })}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ))}
           </div>
-        </footer>
+
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="w-10 h-10 flex flex-col justify-center items-center gap-1.5 z-[310] relative">
+            <div className={`w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
+            <div className={`w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
+            <div className={`w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
+          </button>
+        </div>
+      </nav>
+
+      {/* 펼쳐지는 메뉴 레이어 (타입 에러 해결 부분) */}
+      <motion.div 
+        initial={false}
+        animate={isMenuOpen ? "open" : "closed"}
+        variants={{ 
+          open: { height: "auto", opacity: 1, transition: { duration: 0.4 } }, 
+          closed: { height: 0, opacity: 0, transition: { duration: 0.3 } } 
+        }}
+        className="fixed inset-x-0 z-[250] shadow-2xl overflow-hidden border-b-2"
+        style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", top: '64px' }}
+      >
+        <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 p-10">
+          {(Object.entries(menuData) as [keyof MenuData, (MenuItem[] | string[])][]).map(([key, items]) => (
+            <div key={key}>
+              <div className="text-red-600 font-black text-[11px] mb-4 uppercase tracking-widest border-b pb-1" style={{ borderColor: "var(--border-color)" }}>
+                {key === 'news' ? 'NEWS' : key === 'stock' ? 'STOCK' : key === 'dict' ? 'DICTIONARY' : 'PICK'}
+              </div>
+              <div className="flex flex-col gap-2.5">
+                {items.map((item: any) => {
+                  const label = typeof item === 'string' ? item : item.name;
+                  const href = typeof item === 'string' ? `/dictionary?cat=${item}` : (item.href || "/");
+                  return (
+                    <Link 
+                      key={label} 
+                      href={href} 
+                      onClick={() => setIsMenuOpen(false)} 
+                      className="text-[14px] font-bold hover:text-red-600 transition-colors"
+                    >
+                      {label}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </motion.div>
+
+      <div className="flex-grow">
+        {children}
       </div>
-    </body>
+
+      <footer className="py-16 border-t-2 text-center" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+        <div className="font-black text-2xl text-red-600 mb-4 italic">BULL'S EYE</div>
+        <p className="text-[10px] font-bold opacity-30 tracking-[0.4em]">© 2026 BULL'S EYE. ALL RIGHTS RESERVED.</p>
+      </footer>
+    </div>
   );
 }
