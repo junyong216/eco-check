@@ -7,9 +7,11 @@ const config: CapacitorConfig = {
   server: { androidScheme: 'https' },
   plugins: {
     SplashScreen: {
-      launchShowDuration: 2000, // 2초 동안 노출
-      backgroundColor: "#F1F5F9", // 앱 배경색과 맞춤
-      showSpinner: false, // 로딩 동그라미 숨김
+      launchShowDuration: 2000, 
+      // 👇 이 부분을 수정하세요! (#F1F5F9 -> #222222)
+      backgroundColor: "#222222", 
+      showSpinner: false, 
+      androidScaleType: "CENTER_CROP", // 로고가 꽉 차게 나옵니다
     },
   },
 };
