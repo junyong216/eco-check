@@ -1,7 +1,6 @@
 import "./globals.css";
-// 폰트 최적화를 위해 Next.js 내장 폰트 사용 추천
 import { Inter } from "next/font/google"; 
-import { Metadata } from "next"; // 타입 안전성을 위해 추가하는 것이 좋습니다.
+import { Metadata } from "next"; 
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,10 +15,27 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    // suppressHydrationWarning: 다크모드 전환 시 클래스 불일치 경고 방지
     <html lang="ko" suppressHydrationWarning>
       <body className={inter.className}>
         {children}
+
+        {/* --- 여기 추가: 서비스 워커 등록 스크립트 --- */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                  navigator.serviceWorker.register('/sw.js').then(function(reg) {
+                    console.log('Service Worker registered');
+                  }).catch(function(err) {
+                    console.log('Service Worker registration failed: ', err);
+                  });
+                });
+              }
+            `,
+          }}
+        />
+        {/* -------------------------------------- */}
       </body>
     </html>
   );
