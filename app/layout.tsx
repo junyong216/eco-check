@@ -1,15 +1,17 @@
 import "./globals.css";
 // 폰트 최적화를 위해 Next.js 내장 폰트 사용 추천
 import { Inter } from "next/font/google"; 
+import { Metadata } from "next"; // 타입 안전성을 위해 추가하는 것이 좋습니다.
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "BULL'S EYE - 스마트 경제 지표",
   description: "실시간 금융 지표 및 경제 뉴스",
-  verfication: {
-    google: <meta name="google-site-verification" content="l-yo6JfY6p6TB-5Hg2rN9VjGa8oU6LehgDM3caKaycY" />
-  }
+  // --- 이 부분이 올바른 작성법입니다 ---
+  verification: {
+    google: "l-yo6JfY6p6TB-5Hg2rN9VjGa8oU6LehgDM3caKaycY",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
