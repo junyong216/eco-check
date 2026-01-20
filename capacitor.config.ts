@@ -7,11 +7,13 @@ const config: CapacitorConfig = {
   server: { androidScheme: 'https' },
   plugins: {
     SplashScreen: {
-      launchShowDuration: 2000, 
-      // 👇 이 부분을 수정하세요! (#F1F5F9 -> #222222)
-      backgroundColor: "#222222", 
-      showSpinner: false, 
-      androidScaleType: "CENTER_CROP", // 로고가 꽉 차게 나옵니다
+      launchShowDuration: 2000,
+      backgroundColor: "#222222",
+      showSpinner: false,
+      // 중요: CENTER_CROP은 이미지를 늘리지만, CENTER는 이미지 크기 그대로 중앙에 둡니다.
+    androidScaleType: "CENTER", 
+    splashFullScreen: true,
+    splashImmersive: true,
     },
   },
 };
