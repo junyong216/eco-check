@@ -4,8 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import DarkModeToggle from "@/components/DarkModeToggle";
 import AdSense from "@/components/AdSense";
+import AdWrapper from "@/components/AdWrapper";
 
-// --- 네비게이션 데이터 (일관성 유지) ---
+// --- 네비게이션 데이터 ---
 const newsCategories = [
   { id: "market", name: "시장지표", query: "시장지표" },
   { id: "interest", name: "금리이슈", query: "금리전망" },
@@ -38,7 +39,7 @@ export default function Terms() {
 
         <div className="flex items-center h-full gap-4 md:gap-8 font-black text-[15px]">
           <div className="hidden lg:flex items-center h-full gap-8 mr-4">
-            {/* 뉴스 */}
+            {/* 뉴스 드롭다운 */}
             <div className="relative h-full flex items-center group" onMouseEnter={() => setOpenDropdown('news')} onMouseLeave={() => setOpenDropdown(null)}>
               <Link href="/news" className="flex items-center gap-1 hover:text-red-600 transition-colors">
                 뉴스 <span className={`text-[10px] transition-transform duration-300 ${openDropdown === 'news' ? 'rotate-180' : ''}`}>▼</span>
@@ -51,7 +52,7 @@ export default function Terms() {
               </div>
             </div>
 
-            {/* 증권 */}
+            {/* 증권 드롭다운 */}
             <div className="relative h-full flex items-center group" onMouseEnter={() => setOpenDropdown('stock')} onMouseLeave={() => setOpenDropdown(null)}>
               <Link href="/stock" className="flex items-center gap-1 hover:text-red-600 transition-colors">
                 증권 <span className={`text-[10px] transition-transform duration-300 ${openDropdown === 'stock' ? 'rotate-180' : ''}`}>▼</span>
@@ -63,7 +64,7 @@ export default function Terms() {
               </div>
             </div>
 
-            {/* 용어사전 */}
+            {/* 용어사전 드롭다운 */}
             <div className="relative h-full flex items-center group" onMouseEnter={() => setOpenDropdown('dict')} onMouseLeave={() => setOpenDropdown(null)}>
               <Link href="/dictionary" className="flex items-center gap-1 hover:text-red-600 transition-colors">
                 용어사전 <span className={`text-[10px] transition-transform duration-300 ${openDropdown === 'dict' ? 'rotate-180' : ''}`}>▼</span>
@@ -76,7 +77,18 @@ export default function Terms() {
               </div>
             </div>
             
-            <Link href="/recommend" className="hover:text-red-600 transition-colors">추천</Link>
+            {/* 추천 드롭다운 (수정됨) */}
+            <div className="relative h-full flex items-center group" onMouseEnter={() => setOpenDropdown('recommend')} onMouseLeave={() => setOpenDropdown(null)}>
+              <Link href="/recommend" className="flex items-center gap-1 hover:text-red-600 transition-colors">
+                추천 <span className={`text-[10px] transition-transform duration-300 ${openDropdown === 'recommend' ? 'rotate-180' : ''}`}>▼</span>
+              </Link>
+              <div className={`absolute top-16 left-1/2 -translate-x-1/2 w-40 py-2 rounded-2xl border shadow-2xl transition-all ${openDropdown === 'recommend' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible translate-y-2'}`}
+                   style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+                {recommendTabs.map((tab) => (
+                  <Link key={tab.slug} href={`/recommend?tab=${tab.slug}`} className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition text-[13px]" style={{ color: "var(--text-main)" }}>{tab.name}</Link>
+                ))}
+              </div>
+            </div>
           </div>
 
           <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="w-10 h-10 flex flex-col justify-center items-center gap-1.5 focus:outline-none z-[310]">
@@ -86,18 +98,18 @@ export default function Terms() {
           </button>
         </div>
 
-        {/* 햄버거 메뉴 */}
+        {/* 햄버거 메뉴 내부 */}
         <div className={`fixed inset-x-0 top-16 transition-all duration-500 ease-in-out overflow-hidden shadow-2xl z-[250] ${isMenuOpen ? 'max-h-screen border-b opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`}
              style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-          <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 p-10 font-bold">
-            {/* ... 햄버거 내부 데이터 생략 (동일한 구조 유지) ... */}
+          <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 p-10 font-bold text-[var(--text-main)]">
+            {/* ... 뉴스, 증권 섹션들 ... */}
             <div>
               <div className="text-red-600 font-black text-xs mb-4 uppercase tracking-widest border-b pb-2">서비스 메뉴</div>
               <div className="flex flex-col gap-3">
-                <Link href="/news" onClick={() => setIsMenuOpen(false)} className="text-[14px]" style={{ color: "var(--text-main)" }}>뉴스 홈</Link>
-                <Link href="/stock" onClick={() => setIsMenuOpen(false)} className="text-[14px]" style={{ color: "var(--text-main)" }}>증권 가이드</Link>
-                <Link href="/dictionary" onClick={() => setIsMenuOpen(false)} className="text-[14px]" style={{ color: "var(--text-main)" }}>경제 용어사전</Link>
-                <Link href="/recommend" onClick={() => setIsMenuOpen(false)} className="text-[14px]" style={{ color: "var(--text-main)" }}>불스아이 추천</Link>
+                <Link href="/news" onClick={() => setIsMenuOpen(false)} className="text-[14px] hover:text-red-600 transition">뉴스 홈</Link>
+                <Link href="/stock" onClick={() => setIsMenuOpen(false)} className="text-[14px] hover:text-red-600 transition">증권 가이드</Link>
+                <Link href="/dictionary" onClick={() => setIsMenuOpen(false)} className="text-[14px] hover:text-red-600 transition">경제 용어사전</Link>
+                <Link href="/recommend" onClick={() => setIsMenuOpen(false)} className="text-[14px] hover:text-red-600 transition">불스아이 추천</Link>
               </div>
             </div>
           </div>
@@ -111,21 +123,21 @@ export default function Terms() {
           <p className="text-sm font-bold opacity-50 uppercase tracking-widest" style={{ color: "var(--text-sub)" }}>이용약관 및 투자 책임 면책 고지</p>
         </header>
 
-        <div className="mb-16">
+        <AdWrapper minHeight="200px">
           <AdSense slot="1234567890" format="auto" />
-        </div>
+        </AdWrapper>
         
-        <div className="space-y-16 leading-relaxed">
-          <section className="relative">
+        <div className="space-y-16 leading-relaxed mt-16">
+          <section>
             <h2 className="text-2xl font-black mb-6 flex items-center gap-3" style={{ color: "var(--text-main)" }}>
               <span className="text-red-600 text-sm">01.</span> 서비스의 목적
             </h2>
             <p className="text-[15px] md:text-[16px] font-bold leading-8 opacity-80" style={{ color: "var(--text-sub)" }}>
-              본 서비스(BULL'S EYE)는 사용자에게 공포탐욕지수, 실시간 지수, 환율 정보 등 주요 경제 지표를 직관적으로 제공하고, 올바른 경제 지식 함양을 돕는 것을 목적으로 합니다.
+              본 서비스(BULL'S EYE)는 사용자에게 실시간 경제 지표, 환율 정보, 금융 용어 등 주요 경제 데이터를 제공하여 합리적인 경제적 의사결정을 돕는 것을 목적으로 합니다.
             </p>
           </section>
 
-          <section className="relative">
+          <section>
             <h2 className="text-2xl font-black mb-6 flex items-center gap-3 text-red-600">
               <span className="text-red-600 text-sm">02.</span> 투자 책임 면책 조항
             </h2>
@@ -139,35 +151,31 @@ export default function Terms() {
             </div>
           </section>
 
-          <div className="my-16">
+          <AdWrapper minHeight="100px">
             <AdSense slot="0987654321" format="horizontal" />
-          </div>
+          </AdWrapper>
 
-          <section className="relative">
+          <section>
             <h2 className="text-2xl font-black mb-6 flex items-center gap-3" style={{ color: "var(--text-main)" }}>
-              <span className="text-red-600 text-sm">03.</span> 데이터의 정확성
+              <span className="text-red-600 text-sm">03.</span> 데이터의 정확성 및 광고 게재
             </h2>
             <p className="text-[15px] md:text-[16px] font-bold leading-8 opacity-80" style={{ color: "var(--text-sub)" }}>
-              본 서비스는 외부 공신력 있는 API를 통해 데이터를 제공받으나, 네트워크 환경이나 기술적 오류로 인해 실제 시장 데이터와 미세한 차이가 발생할 수 있습니다. 운영자는 데이터의 절대적 정확성을 보장하지 않습니다.
+              운영자는 정보의 정확성을 위해 노력하나 외부 API의 오류 등으로 실제 데이터와 차이가 발생할 수 있습니다. 또한, 본 서비스는 무료 운영을 위해 구글 애드센스 등 제3자 광고를 게재하며 관련 쿠키를 사용할 수 있습니다.
             </p>
           </section>
 
-          <section className="relative">
+          <section>
             <h2 className="text-2xl font-black mb-6 flex items-center gap-3" style={{ color: "var(--text-main)" }}>
-              <span className="text-red-600 text-sm">04.</span> 서비스의 중단 및 변경
+              <span className="text-red-600 text-sm">04.</span> 서비스의 변경 및 중단
             </h2>
             <p className="text-[15px] md:text-[16px] font-bold leading-8 opacity-80" style={{ color: "var(--text-sub)" }}>
-              운영자는 더 나은 서비스 제공을 위한 시스템 점검, 서버 교체 등 필요한 경우 사전 고지 없이 서비스의 일부 또는 전부를 중단하거나 업데이트할 수 있습니다.
+              운영자는 시스템 성능 개선 또는 서버 유지보수를 위해 사전 고지 없이 서비스 내용을 변경하거나 일시적으로 중단할 수 있습니다.
             </p>
           </section>
 
           <div className="pt-10 border-t border-dashed" style={{ borderColor: "var(--border-color)" }}>
-            <p className="text-xs font-black opacity-40 uppercase tracking-[0.2em]">Effective Date: 2026. 01. 15</p>
+            <p className="text-xs font-black opacity-40 uppercase tracking-[0.2em]">Effective Date: 2026. 01. 20</p>
           </div>
-        </div>
-
-        <div className="mt-16">
-          <AdSense slot="1122334455" format="auto" />
         </div>
 
         <div className="mt-24 text-center">
