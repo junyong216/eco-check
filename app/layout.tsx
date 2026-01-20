@@ -7,7 +7,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   title: "BULL'S EYE - 스마트 경제 지표",
   description: "실시간 금융 지표 및 경제 뉴스",
-  // 파비콘이나 뷰포트 설정을 여기에 추가할 수 있습니다.
+  verfication: {
+    google: <meta name="google-site-verification" content="l-yo6JfY6p6TB-5Hg2rN9VjGa8oU6LehgDM3caKaycY" />
+  }
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
