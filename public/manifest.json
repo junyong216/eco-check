@@ -4,8 +4,8 @@
   "description": "시장의 정곡을 찌르는 실시간 경제 지표 및 뉴스 다이렉트 패스",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#dc2626",
+  "background_color": "#222222",
+  "theme_color": "#222222",
   "icons": [
     {
       "src": "/icons/icon-48.webp",

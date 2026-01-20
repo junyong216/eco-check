@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "BULL'S EYE - 스마트 경제 지표",
   description: "실시간 금융 지표 및 경제 뉴스",
-  // --- 이 부분이 올바른 작성법입니다 ---
+  manifest: "/manifest.json",
   verification: {
     google: "l-yo6JfY6p6TB-5Hg2rN9VjGa8oU6LehgDM3caKaycY",
   },
