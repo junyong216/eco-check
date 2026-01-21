@@ -66,7 +66,10 @@ function DictionaryContent() {
     { category: "투자전략", word: "복리효과", desc: "이자에 이자가 붙는 원리입니다. 시간이 갈수록 원금이 눈덩이처럼 불어나는 현상으로, 가치 투자의 가장 강력한 무기입니다." },
     { category: "투자전략", word: "모멘텀 투자", desc: "주가가 상승하는 추세를 타서 매매하는 방식입니다. 오르는 주식이 더 오를 것이라는 기대감에 투자하는 기법입니다." },
     { category: "투자전략", word: "배당성향", desc: "기업이 벌어들인 순이익 중 얼마를 주주에게 배당으로 주는지 나타내는 비율입니다. 이 비율이 높을수록 주주 환원에 적극적인 기업입니다." },
-    { category: "투자전략", word: "안전마진", desc: "기업의 실제 가치보다 주가가 훨씬 낮게 거래될 때의 차이를 말합니다. 손실을 보지 않기 위해 확보하는 심리적, 수치적 여유분입니다." }
+    { category: "투자전략", word: "안전마진", desc: "기업의 실제 가치보다 주가가 훨씬 낮게 거래될 때의 차이를 말합니다. 손실을 보지 않기 위해 확보하는 심리적, 수치적 여유분입니다." },
+    { category: "투자전략", word: "선물거래 (Futures)", desc: "미래의 특정 시점에 정해진 가격으로 상품을 사고팔기로 약속하는 거래입니다. 주가 하락이 예상될 때 수익을 내는 '숏(Short)' 포지션이 가능하며, 적은 돈으로 큰 수익을 노리는 레버리지가 가능하지만 그만큼 손실 위험도 매우 큽니다." },
+    { category: "투자전략", word: "롱 (Long) & 숏 (Short)", desc: "주가가 오를 것에 투자하는 것을 '롱(매수)', 주가가 내려갈 것에 투자하는 것을 '숏(공매도/매도)'이라고 합니다. 선물거래에서는 시장의 상승과 하락 양방향 모두에 투자하여 수익을 낼 수 있는 기회가 있습니다." },
+    { category: "투자전략", word: "레버리지 (Leverage)", desc: "지렛대라는 뜻으로, 실제 가진 돈보다 몇 배 더 많은 금액을 투자하는 기법입니다. 수익이 나면 배로 벌지만, 반대로 주가가 조금만 반대로 움직여도 원금을 모두 잃을 수 있는 '청산'의 위험이 있습니다." }
   ];
 
   useEffect(() => {
@@ -82,7 +85,7 @@ function DictionaryContent() {
     const matchesCategory = activeCategory === "전체" || item.category === activeCategory;
     return matchesSearch && matchesCategory;
   })
-  .sort((a, b) => a.word.localeCompare(b.word, 'ko')); // 가나다순 정렬 추가
+    .sort((a, b) => a.word.localeCompare(b.word, 'ko')); // 가나다순 정렬 추가
 
   return (
     <div className="min-h-screen font-sans transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
