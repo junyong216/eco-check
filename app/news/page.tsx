@@ -22,6 +22,34 @@ const recommendTabs = [
   { name: "추천 영상", slug: "videos" }
 ];
 
+// --- [추가] 투자자 가이드 데이터 배열 ---
+const investorGuides = [
+  { 
+    id: 1, 
+    title: "고금리 시대의 자산 배분 전략", 
+    desc: "기준금리가 높은 수준을 유지할 때는 현금 흐름이 우수한 기업과 채권형 자산의 매력도가 높아집니다. 불스아이와 함께 금리 사이클을 읽는 법을 익혀보세요.",
+    tag: "Strategy"
+  },
+  { 
+    id: 2, 
+    title: "시장의 심리, 공포와 탐욕 지수", 
+    desc: "모두가 탐욕에 빠졌을 때 경계하고, 모두가 공포에 질렸을 때 기회를 찾는 역발상 투자의 핵심은 객관적인 데이터 분석에서 시작됩니다.",
+    tag: "Psychology"
+  },
+  { 
+    id: 3, 
+    title: "분산 투자의 기술: 포트폴리오 최적화", 
+    desc: "단순히 종목을 나누는 것을 넘어, 상관관계가 낮은 자산군에 분산하여 하락장에서도 내 자산을 지키는 방어 기법을 알아봅니다.",
+    tag: "Risk"
+  },
+  { 
+    id: 4, 
+    title: "워렌 버핏의 가치투자 철학", 
+    desc: "위대한 기업을 적절한 가격에 사는 법. 기업의 내재 가치를 계산하고 안전마진을 확보하는 장기 투자자의 핵심 원칙을 정리했습니다.",
+    tag: "Legend"
+  }
+];
+
 export default function NewsPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -41,7 +69,6 @@ export default function NewsPage() {
         <div className="flex items-center h-full gap-4 md:gap-8 font-black text-[15px]">
           {/* [PC 메뉴] */}
           <div className="hidden lg:flex items-center h-full gap-8 mr-4">
-            {/* 뉴스 (활성 상태) */}
             <div className="relative h-full flex items-center group" onMouseEnter={() => setOpenDropdown('news')} onMouseLeave={() => setOpenDropdown(null)}>
               <Link href="/news" className="text-red-600 flex items-center gap-1">
                 뉴스 <span className={`text-[10px] transition-transform duration-300 ${openDropdown === 'news' ? 'rotate-180' : ''}`}>▼</span>
@@ -54,7 +81,6 @@ export default function NewsPage() {
               </div>
             </div>
 
-            {/* 증권 */}
             <div className="relative h-full flex items-center group" onMouseEnter={() => setOpenDropdown('stock')} onMouseLeave={() => setOpenDropdown(null)}>
               <Link href="/stock" className="flex items-center gap-1 hover:text-red-600 transition-colors" style={{ color: "var(--text-main)" }}>
                 증권 <span className={`text-[10px] transition-transform duration-300 ${openDropdown === 'stock' ? 'rotate-180' : ''}`}>▼</span>
@@ -66,7 +92,6 @@ export default function NewsPage() {
               </div>
             </div>
 
-            {/* 용어사전 */}
             <div className="relative h-full flex items-center group" onMouseEnter={() => setOpenDropdown('dict')} onMouseLeave={() => setOpenDropdown(null)}>
               <Link href="/dictionary" className="flex items-center gap-1 hover:text-red-600 transition-colors" style={{ color: "var(--text-main)" }}>
                 용어사전 <span className={`text-[10px] transition-transform duration-300 ${openDropdown === 'dict' ? 'rotate-180' : ''}`}>▼</span>
@@ -79,7 +104,6 @@ export default function NewsPage() {
               </div>
             </div>
 
-            {/* 추천 */}
             <div className="relative h-full flex items-center group" onMouseEnter={() => setOpenDropdown('recommend')} onMouseLeave={() => setOpenDropdown(null)}>
               <Link href="/recommend" className="flex items-center gap-1 hover:text-red-600 transition-colors" style={{ color: "var(--text-main)" }}>
                 추천 <span className={`text-[10px] transition-transform duration-300 ${openDropdown === 'recommend' ? 'rotate-180' : ''}`}>▼</span>
@@ -93,7 +117,6 @@ export default function NewsPage() {
             </div>
           </div>
 
-          {/* 전체 메뉴 토글 버튼 */}
           <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="w-10 h-10 flex flex-col justify-center items-center gap-1.5 focus:outline-none z-[310]">
             <div className={`w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
             <div className={`w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
@@ -150,6 +173,7 @@ export default function NewsPage() {
           <AdSense slot="9988776655" format="auto" />
         </div>
 
+        {/* --- 뉴스 카드 섹션 --- */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {newsCategories.map((cat, index) => (
             <div key={cat.id} className="contents">
@@ -175,7 +199,6 @@ export default function NewsPage() {
                 <div className="text-[11px] font-bold font-mono text-red-600/50 uppercase tracking-widest">BULL'S EYE AUTO-CURATION</div>
               </a>
 
-              {/* 4번째 뉴스 카드 다음 광고 (데이터 유지) */}
               {index === 3 && (
                 <div className="col-span-1 md:col-span-2 my-4">
                   <AdSense slot="1234567890" format="fluid" />
@@ -185,17 +208,34 @@ export default function NewsPage() {
           ))}
         </div>
 
+        {/* --- [업그레이드된] 스마트 투자자 가이드 섹션 --- */}
         <section className="mt-32 pt-20 border-t" style={{ borderColor: "var(--border-color)" }}>
-          <h2 className="text-3xl font-black mb-10 tracking-tight text-red-600">🎯 스마트 투자자 가이드</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-base leading-relaxed" style={{ color: "var(--text-sub)" }}>
-            <div className="space-y-4">
-              <h3 className="text-xl font-bold" style={{ color: "var(--text-main)" }}>1. 고금리 시대의 자산 배분 전략</h3>
-              <p>기준금리가 높은 수준을 유지할 때는 현금 흐름이 우수한 기업과 채권형 자산의 매력도가 높아집니다. 불스아이와 함께 금리 사이클을 읽는 법을 익혀보세요.</p>
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-black tracking-tight text-red-600 mb-2">🎯 스마트 투자자 가이드</h2>
+              <p className="font-bold opacity-60 text-sm">초보부터 고수까지, 시장을 이기는 핵심 인사이트</p>
             </div>
-            <div className="space-y-4">
-              <h3 className="text-xl font-bold" style={{ color: "var(--text-main)" }}>2. 시장의 심리, 공포와 탐욕 지수</h3>
-              <p>모두가 탐욕에 빠졌을 때 경계하고, 모두가 공포에 질렸을 때 기회를 찾는 역발상 투자의 핵심은 객관적인 데이터 분석에서 시작됩니다.</p>
-            </div>
+            <div className="text-sm font-black text-red-600/50 italic">TOTAL {investorGuides.length} GUIDES</div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {investorGuides.map((guide) => (
+              <div 
+                key={guide.id} 
+                className="group p-8 rounded-[32px] border transition-all hover:shadow-2xl hover:-translate-y-1"
+                style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}
+              >
+                <span className="inline-block text-[10px] font-black text-red-600 border border-red-600 px-2 py-0.5 rounded mb-4 uppercase tracking-tighter">
+                  {guide.tag}
+                </span>
+                <h3 className="text-xl font-black mb-4 group-hover:text-red-600 transition-colors" style={{ color: "var(--text-main)" }}>
+                  {guide.title}
+                </h3>
+                <p className="text-sm md:text-[15px] font-medium leading-relaxed opacity-70 break-keep" style={{ color: "var(--text-sub)" }}>
+                  {guide.desc}
+                </p>
+              </div>
+            ))}
           </div>
         </section>
 
