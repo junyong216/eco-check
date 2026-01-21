@@ -3,8 +3,6 @@
 
 ![main](https://github.com/user-attachments/assets/668227bb-15c0-4d89-a745-5ae43d21e1fe)
 
-![BULL'S EYE Main Screenshot]
-
 ## 🔗 프로젝트 링크
 - **배포 주소:** [BULL'S EYE 바로가기](https://bullseye-check.vercel.app/)
 - **상세 포트폴리오:** [Notion 보러가기](https://www.notion.so/Project-BULL-S-EYE-2ef5cf70a265803b90afe190b2f38f6a?source=copy_link)
