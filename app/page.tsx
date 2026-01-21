@@ -193,7 +193,7 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* --- 모바일/전체 메뉴 레이어 (수정됨: 애니메이션 적용) --- */}
+      {/* --- 모바일/전체 메뉴 레이어 (뉴스/사전 페이지 스타일과 100% 통일) --- */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
@@ -201,15 +201,17 @@ export default function Home() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }} // 부드러운 하강 효과
-            className="fixed inset-x-0 overflow-hidden shadow-2xl z-[250] border-b"
-            style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", top: '64px' }}
+            className="fixed inset-x-0 top-16 z-[250] overflow-hidden shadow-2xl border-b"
+            style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}
           >
-            <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 p-10">
+            <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 p-10 font-bold">
               {Object.entries(menuData).map(([key, items]) => (
                 <div key={key}>
-                  <div className="text-red-600 font-black text-xs mb-4 uppercase tracking-widest">
+                  {/* 뉴스 페이지와 똑같은 빨간 밑줄 스타일 */}
+                  <div className="text-red-600 text-xs mb-4 uppercase tracking-widest border-b border-red-600 pb-2">
                     {key === 'news' ? '뉴스' : key === 'stock' ? '증권' : key === 'dict' ? '용어사전' : '추천'}
                   </div>
+
                   <div className="flex flex-col gap-3">
                     {items.map((item: any) => {
                       const label = typeof item === 'string' ? item : item.name;
@@ -217,9 +219,21 @@ export default function Home() {
                       const isExternal = typeof item !== 'string' && !item.href;
 
                       return isExternal ? (
-                        <a key={label} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(item.query)}`} target="_blank" className="text-[14px] font-bold hover:text-red-600 transition-colors" style={{ color: "var(--text-main)" }}>{label}</a>
+                        <a key={label}
+                          href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(item.query)}`}
+                          target="_blank"
+                          className="text-[15px] hover:text-red-600 transition-colors"
+                          style={{ color: "var(--text-main)" }}>
+                          {label}
+                        </a>
                       ) : (
-                        <Link key={label} href={href} onClick={() => setIsMenuOpen(false)} className="text-[14px] font-bold hover:text-red-600 transition-colors" style={{ color: "var(--text-main)" }}>{label}</Link>
+                        <Link key={label}
+                          href={href}
+                          onClick={() => setIsMenuOpen(false)}
+                          className="text-[15px] hover:text-red-600 transition-colors"
+                          style={{ color: "var(--text-main)" }}>
+                          {label}
+                        </Link>
                       );
                     })}
                   </div>
