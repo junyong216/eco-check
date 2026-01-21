@@ -253,10 +253,10 @@ function StockContent() {
       {/* --- 메인 콘텐츠 (기존 로직 유지) --- */}
       <main className="max-w-5xl mx-auto px-5 py-12">
         <header className="mb-12">
-          <h1 className="text-5xl md:text-6xl font-black tracking-tighter mb-8 italic uppercase" style={{ color: "var(--text-main)" }}>Market_Watch</h1>
+          <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-8 italic uppercase break-keep" style={{ color: "var(--text-main)" }}>Market_Watch</h1>
           <form onSubmit={addToMyList} className="relative max-w-2xl group mb-10">
-            <input type="text" placeholder="관심 종목 추가 (예: 삼성전자)" className="w-full h-16 px-8 rounded-2xl border-2 focus:border-red-600 shadow-xl outline-none transition-all" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", color: "var(--text-main)" }} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-            <button type="submit" className="absolute right-2 top-2 h-12 px-8 bg-red-600 text-white rounded-xl font-black hover:bg-red-700 transition">ADD</button>
+            <input type="text" placeholder="관심 종목 추가 (예: 삼성전자)" className="w-full h-16 pl-6 pr-24 md:pr-32 rounded-2xl border-2 focus:border-red-600 shadow-xl outline-none transition-all text-sm md:text-base" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", color: "var(--text-main)" }} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+            <button type="submit" className="absolute right-2 top-2 h-12 px-5 md:px-8 bg-red-600 text-white rounded-xl font-black hover:bg-red-700 transition text-sm md:text-base">ADD</button>
           </form>
 
           <div className="my-10">
