@@ -6,7 +6,7 @@
 ![BULL'S EYE Main Screenshot]
 
 ## 🔗 프로젝트 링크
-- **배포 주소:** [BULL'S EYE 바로가기]([https://사용자님의-버셀-주소.vercel.app)](https://bullseye-check.vercel.app/)
+- **배포 주소:** [BULL'S EYE 바로가기]([https://bullseye-check.vercel.app/)]
 - **상세 포트폴리오:** [Notion 보러가기](https://www.notion.so/Project-BULL-S-EYE-2ef5cf70a265803b90afe190b2f38f6a?source=copy_link)
 
 ## 🛠 사용 기술 (Tech Stack)
