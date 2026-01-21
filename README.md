@@ -1,8 +1,6 @@
 <img width="1920" height="988" alt="image" src="https://github.com/user-attachments/assets/450d48e4-d5c2-44bc-8980-550b7e6a05a4" /># 🎯 BULL'S EYE: Smart Financial Insights
 > 실시간 금융 뉴스 큐레이션 및 전문 용어 사전 서비스
 
-![main](https://github.com/user-attachments/assets/668227bb-15c0-4d89-a745-5ae43d21e1fe)
-
 ## 🔗 프로젝트 링크
 - **배포 주소:** [BULL'S EYE 바로가기](https://bullseye-check.vercel.app/)
 - **상세 포트폴리오:** [Notion 보러가기](https://www.notion.so/Project-BULL-S-EYE-2ef5cf70a265803b90afe190b2f38f6a?source=copy_link)
