@@ -362,17 +362,17 @@ export default function Home() {
             {/* 왼쪽: 서비스 소개 */}
             <div>
               <div className="font-black text-3xl text-red-600 mb-6 tracking-tighter italic uppercase">BULL'S EYE</div>
-              <p className="text-sm md:text-base font-bold leading-relaxed opacity-70 mb-4" style={{ color: "var(--text-main)" }}>
-                BULL'S EYE는 복잡한 금융 데이터를 한눈에 꿰뚫어 볼 수 있는 투자 가이드 플랫폼입니다.
-                실시간 시장 지표와 증권 정보, 경제 용어 사전을 통해 투자자가 올바른 결정을 내릴 수 있도록 돕습니다.
-                우리는 데이터의 정곡을 찔러 당신의 자산이 목표(Bull's Eye)에 도달하도록 서포트합니다.
+              <p className="text-sm md:text-[15px] font-bold leading-relaxed opacity-70 mb-4 max-w-[500px]" style={{ color: "var(--text-main)" }}>
+                BULL'S EYE는 복잡한 금융 데이터를 한눈에 꿰뚫는 투자 가이드 플랫폼입니다.
+                실시간 시장 지표와 증권 정보, 용어 사전을 통해 올바른 투자 결정을 돕습니다.
+                데이터의 정곡을 찔러 당신의 자산이 목표(Bull's Eye)에 도달하도록 지원합니다.
               </p>
             </div>
 
             {/* 오른쪽: 연락처 및 정책 */}
             <div className="md:text-right flex flex-col md:items-end gap-1">
               <div className="text-[10px] font-black uppercase tracking-[0.2em] text-red-600 mb-2">Contact Us</div>
-              
+
               {/* 성함 추가 */}
               <div className="text-base md:text-lg font-black" style={{ color: "var(--text-main)" }}>
                 운영자 정준용
