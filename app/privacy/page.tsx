@@ -215,8 +215,14 @@ export default function Privacy() {
         </div>
       </div>
 
-      <footer className="py-16 text-center opacity-40 text-[10px] font-black tracking-[0.5em] border-t uppercase" style={{ borderColor: "var(--border-color)" }}>
-        © 2026 BULL'S EYE. ALL RIGHTS RESERVED.
+      <footer className="py-12 border-t text-center" style={{ borderColor: "var(--border-color)" }}>
+        <div className="flex justify-center gap-6 mb-4 text-[10px] font-black text-red-600/50 uppercase tracking-widest">
+          <Link href="/privacy" className="hover:text-red-600 transition">개인정보 처리방침</Link>
+          <Link href="/terms" className="hover:text-red-600 transition">이용약관</Link>
+        </div>
+        <div className="text-[10px] font-bold tracking-[0.5em] uppercase opacity-40" style={{ color: "var(--text-sub)" }}>
+          © 2026 BULL'S EYE. ALL RIGHTS RESERVED.
+        </div>
       </footer>
     </main>
   );
