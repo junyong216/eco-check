@@ -292,7 +292,7 @@ export default function Home() {
 
         {/* 통합 검색창 */}
         <div className="max-w-2xl mx-auto mb-16 md:mb-28 px-2">
-          <form onSubmit={executeSearch} className="relative group">
+          <form onSubmit={executeSearch} className="relative group mb-6"> {/* mb-6 추가로 키워드와 간격 확보 */}
             <input
               type="text"
               placeholder="종목명 또는 지표 검색"
@@ -301,8 +301,37 @@ export default function Home() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <button type="submit" className="absolute right-2 top-2 bottom-2 px-5 md:px-10 bg-red-600 text-white rounded-full font-black text-xs md:text-base hover:bg-red-700 transition-all hover:scale-95 active:scale-90">검색</button>
+            <button type="submit" className="absolute right-2 top-2 bottom-2 px-5 md:px-10 bg-red-600 text-white rounded-full font-black text-xs md:text-base hover:bg-red-700 transition-all hover:scale-95 active:scale-90">
+              검색
+            </button>
           </form>
+
+          {/* 🚀 인기 키워드 추천 레이아웃 */}
+          <div className="flex flex-wrap justify-center gap-2 md:gap-3 px-4">
+            <span className="text-[11px] md:text-xs font-black uppercase tracking-widest opacity-40 mr-2 flex items-center" style={{ color: "var(--text-main)" }}>
+              Trending:
+            </span>
+            {[
+              { label: "삼성전자", query: "삼성전자 주가" },
+              { label: "엔비디아", query: "엔비디아 주가" },
+              { label: "금리전망", query: "미국 금리 전망" },
+              { label: "환율", query: "원달러 환율" },
+              { label: "비트코인", query: "비트코인 시세" },
+            ].map((tag) => (
+              <button
+                key={tag.label}
+                onClick={() => window.open(`https://search.naver.com/search.naver?query=${encodeURIComponent(tag.query)}`, "_blank")}
+                className="px-4 py-1.5 md:px-5 md:py-2 rounded-full border text-[12px] md:text-[13px] font-bold transition-all hover:border-red-600 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10"
+                style={{
+                  backgroundColor: "var(--card-bg)",
+                  borderColor: "var(--border-color)",
+                  color: "var(--text-sub)"
+                }}
+              >
+                # {tag.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* 지표 데이터 */}
