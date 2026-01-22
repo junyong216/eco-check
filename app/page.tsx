@@ -370,12 +370,21 @@ export default function Home() {
             </div>
 
             {/* 오른쪽: 연락처 및 정책 */}
-            <div className="md:text-right flex flex-col md:items-end gap-4">
+            <div className="md:text-right flex flex-col md:items-end gap-1">
               <div className="text-[10px] font-black uppercase tracking-[0.2em] text-red-600 mb-2">Contact Us</div>
-              <a href="mailto:jjyong3872@naver.com" className="text-lg md:text-xl font-black hover:text-red-600 transition-colors break-all">
+              
+              {/* 성함 추가 */}
+              <div className="text-base md:text-lg font-black" style={{ color: "var(--text-main)" }}>
+                운영자 정준용
+              </div>
+
+              {/* 이메일 */}
+              <a href="mailto:jjyong3872@naver.com" className="text-lg md:text-xl font-black hover:text-red-600 transition-colors break-all mb-3">
                 jjyong3872@naver.com
               </a>
-              <div className="flex gap-6 mt-4 text-[12px] font-black uppercase tracking-widest opacity-60">
+
+              {/* 하단 링크 */}
+              <div className="flex gap-6 mt-1 text-[12px] font-black uppercase tracking-widest opacity-60">
                 <Link href="/privacy" className="hover:text-red-600 transition-colors">개인정보 처리방침</Link>
                 <Link href="/terms" className="hover:text-red-600 transition-colors">이용약관</Link>
               </div>
