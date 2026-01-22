@@ -108,6 +108,16 @@ export default function Home() {
               </span>
               <div className={`absolute top-full left-1/2 -translate-x-1/2 pt-2 transition-all ${openDropdown === 'news' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible translate-y-2'}`}>
                 <div className="w-44 rounded-2xl border shadow-2xl p-2" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+
+                  {/* 🚀 뉴스 홈: 기존 스타일과 완벽 통일 */}
+                  <Link
+                    href="/news"
+                    onClick={() => setOpenDropdown(null)}
+                    className="block px-4 py-2.5 rounded-xl text-[13px] hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition font-bold"
+                    style={{ color: "var(--text-main)" }}
+                  >뉴스 홈</Link>
+
+                  {/* 기존 네이버 뉴스 검색 카테고리들 */}
                   {menuData.news.map((item) => (
                     <a key={item.name}
                       href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(item.query)}`}
@@ -347,13 +357,37 @@ export default function Home() {
       </motion.section>
 
       <footer className="py-16 md:py-24 border-t-2" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-        <div className="max-w-6xl mx-auto px-6 text-center">
-          <div className="font-black text-3xl text-red-600 mb-8 tracking-tighter italic uppercase">BULL'S EYE</div>
-          <div className="flex justify-center gap-6 md:gap-10 mb-10 text-[12px] md:text-[14px] font-black uppercase tracking-widest opacity-60">
-            <Link href="/privacy" className="hover:text-red-600 transition-colors">Privacy</Link>
-            <Link href="/terms" className="hover:text-red-600 transition-colors">Terms</Link>
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16 items-start text-left md:text-left">
+            {/* 왼쪽: 서비스 소개 */}
+            <div>
+              <div className="font-black text-3xl text-red-600 mb-6 tracking-tighter italic uppercase">BULL'S EYE</div>
+              <p className="text-sm md:text-base font-bold leading-relaxed opacity-70 mb-4" style={{ color: "var(--text-main)" }}>
+                BULL'S EYE는 복잡한 금융 데이터를 한눈에 꿰뚫어 볼 수 있는 투자 가이드 플랫폼입니다.
+                실시간 시장 지표와 증권 정보, 경제 용어 사전을 통해 투자자가 올바른 결정을 내릴 수 있도록 돕습니다.
+                우리는 데이터의 정곡을 찔러 당신의 자산이 목표(Bull's Eye)에 도달하도록 서포트합니다.
+              </p>
+            </div>
+
+            {/* 오른쪽: 연락처 및 정책 */}
+            <div className="md:text-right flex flex-col md:items-end gap-4">
+              <div className="text-[10px] font-black uppercase tracking-[0.2em] text-red-600 mb-2">Contact Us</div>
+              <a href="mailto:jjyong3872@naver.com" className="text-lg md:text-xl font-black hover:text-red-600 transition-colors break-all">
+                jjyong3872@naver.com
+              </a>
+              <div className="flex gap-6 mt-4 text-[12px] font-black uppercase tracking-widest opacity-60">
+                <Link href="/privacy" className="hover:text-red-600 transition-colors">개인정보 처리방침</Link>
+                <Link href="/terms" className="hover:text-red-600 transition-colors">이용약관</Link>
+              </div>
+            </div>
           </div>
-          <p className="text-[10px] md:text-[11px] font-bold tracking-[0.4em] opacity-30 uppercase">© 2026 BULL'S EYE. TARGET YOUR WEALTH. ALL RIGHTS RESERVED.</p>
+
+          {/* 저작권 표시 */}
+          <div className="border-t pt-10 text-center" style={{ borderColor: "var(--border-color)" }}>
+            <p className="text-[10px] md:text-[11px] font-bold tracking-[0.4em] opacity-30 uppercase">
+              © 2026 BULL'S EYE. TARGET YOUR WEALTH. ALL RIGHTS RESERVED.
+            </p>
+          </div>
         </div>
       </footer>
     </div>

@@ -141,7 +141,7 @@ export default function Privacy() {
       {/* --- 본문 콘텐츠 --- */}
       <div className="max-w-3xl mx-auto px-6 py-20">
         <header className="mb-12 text-center md:text-left">
-          <h1 className="text-4xl md:text-5xl font-black mb-6 tracking-tight italic" style={{ color: "var(--text-main)" }}>개인정보처리방침</h1>
+          <h1 className="text-4xl md:text-5xl font-black mb-6 tracking-tight italic" style={{ color: "var(--text-main)" }}>개인정보 처리방침</h1>
           <p className="font-bold opacity-60 break-keep">BULL'S EYE 서비스 이용과 관련하여 귀하의 개인정보가 어떻게 보호되는지 안내해 드립니다.</p>
         </header>
 
