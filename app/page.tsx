@@ -223,6 +223,15 @@ export default function Home() {
                   </div>
 
                   <div className="flex flex-col gap-3">
+                    {key === 'news' && (
+                      <Link
+                        href="/news"
+                        onClick={() => setIsMenuOpen(false)}
+                        className="text-[15px] hover:text-red-600 transition-colors font-black text-red-600"
+                      >
+                        뉴스 홈
+                      </Link>
+                    )}
                     {items.map((item: any) => {
                       const label = typeof item === 'string' ? item : item.name;
                       const href = typeof item === 'string' ? `/dictionary?cat=${item}` : item.href;
