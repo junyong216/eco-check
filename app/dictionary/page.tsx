@@ -15,7 +15,7 @@ const newsCategories = [
   { id: "realestate", name: "부동산", query: "부동산전망" },
   { id: "global", name: "해외경제", query: "글로벌경제" },
 ];
-const dictCategories = ["전체", "주식기초", "재무제표", "거시경제", "투자전략"];
+const dictCategories = ["전체", "주식기초", "재무제표", "거시경제", "투자전략", "미국/해외주식", "지수/상품"];
 const recommendTabs = [
   { name: "추천 도서", slug: "books" },
   { name: "추천 영상", slug: "videos" }
@@ -68,7 +68,17 @@ function DictionaryContent() {
     { category: "투자전략", word: "안전마진", desc: "기업의 실제 가치보다 주가가 훨씬 낮게 거래될 때의 차이를 말합니다. 손실을 보지 않기 위해 확보하는 심리적, 수치적 여유분입니다." },
     { category: "투자전략", word: "선물거래 (Futures)", desc: "미래의 특정 시점에 정해진 가격으로 상품을 사고팔기로 약속하는 거래입니다. 주가 하락이 예상될 때 수익을 내는 '숏(Short)' 포지션이 가능하며, 적은 돈으로 큰 수익을 노리는 레버리지가 가능하지만 그만큼 손실 위험도 매우 큽니다." },
     { category: "투자전략", word: "롱 (Long) & 숏 (Short)", desc: "주가가 오를 것에 투자하는 것을 '롱(매수)', 주가가 내려갈 것에 투자하는 것을 '숏(공매도/매도)'이라고 합니다. 선물거래에서는 시장의 상승과 하락 양방향 모두에 투자하여 수익을 낼 수 있는 기회가 있습니다." },
-    { category: "투자전략", word: "레버리지 (Leverage)", desc: "지렛대라는 뜻으로, 실제 가진 돈보다 몇 배 더 많은 금액을 투자하는 기법입니다. 수익이 나면 배로 벌지만, 반대로 주가가 조금만 반대로 움직여도 원금을 모두 잃을 수 있는 '청산'의 위험이 있습니다." }
+    { category: "투자전략", word: "레버리지 (Leverage)", desc: "지렛대라는 뜻으로, 실제 가진 돈보다 몇 배 더 많은 금액을 투자하는 기법입니다. 수익이 나면 배로 벌지만, 반대로 주가가 조금만 반대로 움직여도 원금을 모두 잃을 수 있는 '청산'의 위험이 있습니다." },
+    { category: "미국/해외주식", word: "나스닥 (NASDAQ)", desc: "미국의 대표적인 IT/기술주 중심의 거래소입니다. 애플, 구글 등 혁신 기업들이 대거 상장되어 있어 전 세계 기술주 흐름의 척도가 됩니다." },
+    { category: "미국/해외주식", word: "다우 지수 (Dow Jones)", desc: "미국에서 가장 오래된 주가지수로, 대표적인 우량 기업 30개를 선정해 주가 평균을 산출합니다. 전통적인 대형주들의 흐름을 보여줍니다." },
+    { category: "미국/해외주식", word: "양도소득세", desc: "해외 주식 투자로 얻은 수익이 연 250만 원을 넘을 경우, 초과 수익의 22%를 국가에 내는 세금입니다." },
+    { category: "미국/해외주식", word: "서학개미", desc: "국내 주식 시장을 넘어 미국 등 해외 주식에 직접 투자하는 한국 개인 투자자들을 일컫는 말입니다." },
+    { category: "미국/해외주식", word: "애프터마켓 (After Market)", desc: "정규 시장이 끝난 뒤에 열리는 시간 외 거래 시장입니다. 미국 주식은 시차 때문에 이 시간대의 변동성을 확인하는 것이 중요합니다." },
+    { category: "지수/상품", word: "S&P 500", desc: "미국 우량 기업 500개의 주가를 모아 만든 지수입니다. 미국 경제의 실질적인 성적표이자 전 세계 투자의 가장 중요한 기준점(벤치마크)이 됩니다." },
+    { category: "지수/상품", word: "원자재 (Commodity)", desc: "석유, 금, 구리, 농산물 등 가공되지 않은 기초 상품입니다. 인플레이션 시기에 자산 가치를 방어하는 수단으로 많이 쓰입니다." },
+    { category: "지수/상품", word: "리츠 (REITs)", desc: "투자자들의 돈을 모아 부동산에 투자하고, 거기서 나오는 임대료 수익을 주주에게 배당으로 나눠주는 부동산 투자 전용 상품입니다." },
+    { category: "지수/상품", word: "공포-탐욕 지수 (Fear & Greed Index)", desc: "시장의 심리 상태를 0(극도의 공포)에서 100(극도의 탐욕)까지 숫자로 나타낸 지수입니다. 투자 시점을 결정할 때 참고하기 좋습니다." },
+    { category: "지수/상품", word: "채권 (Bond)", desc: "정부나 기업이 돈을 빌리기 위해 발행하는 차용증입니다. 주식보다 변동성이 낮고 정기적인 이자 수익을 기대할 수 있어 안전 자산으로 분류됩니다." }
   ];
 
   useEffect(() => {
@@ -87,133 +97,7 @@ function DictionaryContent() {
 
   return (
     <div className="min-h-screen font-sans transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
-
-      {/* --- 네비게이션 (모든 페이지 공용) --- */}
-      <nav className="h-16 border-b flex items-center justify-between px-4 md:px-8 sticky top-0 z-[300] transition-colors shadow-sm"
-        style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-
-        <div className="flex items-center gap-4">
-          <Link href="/" className="font-black text-xl md:text-2xl text-red-600 tracking-tighter italic">BULL'S EYE</Link>
-          <DarkModeToggle />
-        </div>
-
-        <div className="flex items-center h-full font-black text-[15px]">
-          {/* [PC용 메뉴] gap-8로 모든 페이지 간격 통일 */}
-          <div className="hidden lg:flex items-center h-full gap-8 mr-6">
-
-            {/* 뉴스 */}
-            <div className="relative h-full flex items-center group" onMouseEnter={() => setOpenDropdown('news')} onMouseLeave={() => setOpenDropdown(null)}>
-              <span className="flex items-center gap-1 cursor-pointer transition-colors"
-                style={{ color: openDropdown === 'news' ? '#dc2626' : 'var(--text-main)' }}>
-                뉴스 <span className={`text-[10px] transition-transform duration-300 ${openDropdown === 'news' ? 'rotate-180' : ''}`}>▼</span>
-              </span>
-              <div className={`absolute top-16 left-1/2 -translate-x-1/2 w-44 py-2 rounded-2xl border shadow-2xl transition-all ${openDropdown === 'news' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible translate-y-2'}`}
-                style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-                <Link href="/news" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition text-[13px] font-bold" style={{ color: "var(--text-main)" }}>뉴스 홈</Link>
-                {newsCategories.map(cat => (
-                  <a key={cat.id} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}`} target="_blank" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition text-[13px]" style={{ color: "var(--text-main)" }}>{cat.name}</a>
-                ))}
-              </div>
-            </div>
-
-            {/* 증권 (증권 홈 삭제) */}
-            <div className="relative h-full flex items-center group" onMouseEnter={() => setOpenDropdown('stock')} onMouseLeave={() => setOpenDropdown(null)}>
-              <span className="flex items-center gap-1 cursor-pointer transition-colors"
-                style={{ color: openDropdown === 'stock' ? '#dc2626' : 'var(--text-main)' }}>
-                증권 <span className={`text-[10px] transition-transform duration-300 ${openDropdown === 'stock' ? 'rotate-180' : ''}`}>▼</span>
-              </span>
-              <div className={`absolute top-16 left-1/2 -translate-x-1/2 w-44 py-2 rounded-2xl border shadow-2xl transition-all ${openDropdown === 'stock' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible translate-y-2'}`}
-                style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-                <Link href="/stock?tab=list" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition text-[13px] font-bold" style={{ color: "var(--text-main)" }}>증권사 목록</Link>
-                <Link href="/stock?tab=guide" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition text-[13px] font-bold" style={{ color: "var(--text-main)" }}>계좌 가이드</Link>
-              </div>
-            </div>
-
-            {/* 용어사전 */}
-            <div className="relative h-full flex items-center group" onMouseEnter={() => setOpenDropdown('dict')} onMouseLeave={() => setOpenDropdown(null)}>
-              <span className="flex items-center gap-1 cursor-pointer transition-colors"
-                style={{ color: openDropdown === 'dict' ? '#dc2626' : 'var(--text-main)' }}>
-                용어사전 <span className={`text-[10px] transition-transform duration-300 ${openDropdown === 'dict' ? 'rotate-180' : ''}`}>▼</span>
-              </span>
-              <div className={`absolute top-16 left-1/2 -translate-x-1/2 w-44 py-2 rounded-2xl border shadow-2xl transition-all ${openDropdown === 'dict' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible translate-y-2'}`}
-                style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-                {dictCategories.map(cat => (
-                  <Link key={cat} href={`/dictionary?cat=${cat}`} className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition text-[13px]" style={{ color: "var(--text-main)" }}>{cat}</Link>
-                ))}
-              </div>
-            </div>
-
-            {/* 추천 */}
-            <div className="relative h-full flex items-center group" onMouseEnter={() => setOpenDropdown('recommend')} onMouseLeave={() => setOpenDropdown(null)}>
-              <span className="flex items-center gap-1 cursor-pointer transition-colors"
-                style={{ color: openDropdown === 'recommend' ? '#dc2626' : 'var(--text-main)' }}>
-                추천 <span className={`text-[10px] transition-transform duration-300 ${openDropdown === 'recommend' ? 'rotate-180' : ''}`}>▼</span>
-              </span>
-              <div className={`absolute top-16 left-1/2 -translate-x-1/2 w-44 py-2 rounded-2xl border shadow-2xl transition-all ${openDropdown === 'recommend' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible translate-y-2'}`}
-                style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-                <Link href="/recommend?tab=books" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition text-[13px] font-bold" style={{ color: "var(--text-main)" }}>추천 도서</Link>
-                <Link href="/recommend?tab=videos" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 transition text-[13px] font-bold" style={{ color: "var(--text-main)" }}>추천 영상</Link>
-              </div>
-            </div>
-          </div>
-
-          <button onClick={() => setIsFullMenuOpen(!isFullMenuOpen)} className="w-10 h-10 flex flex-col justify-center items-center gap-1.5 focus:outline-none z-[310]">
-            <div className={`w-6 h-0.5 transition-all duration-300 ${isFullMenuOpen ? 'rotate-45 translate-y-2' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
-            <div className={`w-6 h-0.5 transition-all duration-300 ${isFullMenuOpen ? 'opacity-0' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
-            <div className={`w-6 h-0.5 transition-all duration-300 ${isFullMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
-          </button>
-        </div>
-
-        {/* --- 전체 메뉴 레이어 (증권 페이지와 동일) --- */}
-        <AnimatePresence>
-          {isFullMenuOpen && (
-            <>
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsFullMenuOpen(false)}
-                className="fixed inset-0 bg-black/20 dark:bg-black/50 z-[240] backdrop-blur-[2px]" />
-              <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className="fixed inset-x-0 top-16 z-[250] overflow-hidden shadow-2xl border-b"
-                style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-                <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 p-10 font-bold">
-                  <div>
-                    <div className="text-red-600 font-black text-xs mb-4 uppercase tracking-widest border-b border-red-600 pb-2">뉴스</div>
-                    <div className="flex flex-col gap-3">
-                      <Link href="/news" onClick={() => setIsFullMenuOpen(false)} className="text-[14px] font-bold hover:text-red-600" style={{ color: "var(--text-main)" }}>뉴스 홈</Link>
-                      {newsCategories.map(cat => (
-                        <a key={cat.id} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}`} target="_blank" className="text-[14px] hover:text-red-600" style={{ color: "var(--text-main)" }}>{cat.name}</a>
-                      ))}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-red-600 font-black text-xs mb-4 uppercase tracking-widest border-b border-red-600 pb-2">증권</div>
-                    <div className="flex flex-col gap-3 text-[14px]">
-                      <Link href="/stock?tab=list" onClick={() => setIsFullMenuOpen(false)} className="hover:text-red-600" style={{ color: "var(--text-main)" }}>증권사 목록</Link>
-                      <Link href="/stock?tab=guide" onClick={() => setIsFullMenuOpen(false)} className="hover:text-red-600" style={{ color: "var(--text-main)" }}>계좌 가이드</Link>
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-red-600 font-black text-xs mb-4 uppercase tracking-widest border-b border-red-600 pb-2">용어사전</div>
-                    <div className="flex flex-col gap-3 text-[14px]">
-                      {dictCategories.map(cat => (
-                        <Link key={cat} href={`/dictionary?cat=${cat}`} onClick={() => setIsFullMenuOpen(false)} className="hover:text-red-600" style={{ color: "var(--text-main)" }}>{cat}</Link>
-                      ))}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-red-600 font-black text-xs mb-4 uppercase tracking-widest border-b border-red-600 pb-2">추천</div>
-                    <div className="flex flex-col gap-3 text-[14px]">
-                      {recommendTabs.map(tab => (
-                        <Link key={tab.slug} href={`/recommend?tab=${tab.slug}`} onClick={() => setIsFullMenuOpen(false)} className="hover:text-red-600" style={{ color: "var(--text-main)" }}>{tab.name}</Link>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
-      </nav>
-
+      
       {/* --- 메인 콘텐츠 --- */}
       <main className="max-w-5xl mx-auto px-5 py-12 md:py-20">
         <header className="mb-16 text-center md:text-left">

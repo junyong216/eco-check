@@ -1,10 +1,10 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { Metadata } from "next";
+import Navbar from "@/components/Navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
-// --- SEO 및 메타데이터 설정 ---
 export const metadata: Metadata = {
   title: {
     default: "BULL'S EYE - 스마트 경제 지표 & 투자 가이드",
@@ -19,7 +19,6 @@ export const metadata: Metadata = {
     canonical: '/',
   },
 
-  // 3. Open Graph (카톡, 페이스북 공유 시 최적화)
   openGraph: {
     title: "BULL'S EYE - 스마트 경제 데이터 허브",
     description: "투자자를 위한 실시간 경제 지표와 쉬운 용어사전",
@@ -29,7 +28,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/opengraph-image.png", // public 폴더에 넣어둔 파일명과 동일해야 함
+        url: "/opengraph-image.png",
         width: 1200,
         height: 630,
         alt: "BULL'S EYE 메인 미리보기",
@@ -37,7 +36,6 @@ export const metadata: Metadata = {
     ],
   },
 
-  // 4. Twitter (X) 카드 설정
   twitter: {
     card: "summary_large_image",
     title: "BULL'S EYE - 스마트 경제 데이터 허브",
@@ -59,9 +57,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko" suppressHydrationWarning>
       <body className={inter.className}>
+        {/* 모든 페이지 상단에 고정되는 네비게이션 */}
+        <Navbar /> 
+        
+        {/* 각 페이지의 콘텐츠 */}
         {children}
 
-        {/* --- 서비스 워커 등록 스크립트 (PWA) --- */}
+        {/* 서비스 워커 등록 스크립트 (PWA) */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
