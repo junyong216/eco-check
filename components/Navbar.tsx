@@ -15,7 +15,7 @@ const newsCategories = [
   { id: "global", name: "해외경제", query: "글로벌경제" },
 ];
 
-const dictCategories = ["전체", "주식기초", "재무제표", "거시경제", "투자전략", "미국주식 / 해외투자", "지수 / 상품"];
+const dictCategories = ["전체", "주식기초", "재무제표", "거시경제", "투자전략", "미국/해외주식", "지수/상품"];
 
 const recommendTabs = [
   { name: "추천 도서", slug: "books" },
@@ -45,11 +45,11 @@ export default function Navbar() {
       <div className="flex items-center h-full">
         {/* [PC] 상단 가로 메뉴 - 크기 15px, 굵게 */}
         <div className="hidden lg:flex items-center h-full gap-8 mr-6 font-black text-[15px]">
-          
+
           {/* 뉴스 */}
-          <div className="relative h-full flex items-center" 
+          <div className="relative h-full flex items-center"
             onMouseEnter={() => setOpenDropdown('news')} onMouseLeave={() => setOpenDropdown(null)}>
-            <span className="flex items-center gap-1 cursor-pointer transition-colors" 
+            <span className="flex items-center gap-1 cursor-pointer transition-colors"
               style={{ color: openDropdown === 'news' ? '#dc2626' : 'var(--text-main)' }}>
               뉴스 <span className={`text-[10px] transition-transform ${openDropdown === 'news' ? 'rotate-180' : ''}`}>▼</span>
             </span>
@@ -57,16 +57,16 @@ export default function Navbar() {
               style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
               <Link href="/news" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 text-[14px] font-bold" style={{ color: "var(--text-main)" }}>뉴스 홈</Link>
               {newsCategories.map(cat => (
-                <a key={cat.id} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}`} target="_blank" 
+                <a key={cat.id} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}`} target="_blank"
                   className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 text-[14px] font-medium" style={{ color: "var(--text-main)" }}>{cat.name}</a>
               ))}
             </div>
           </div>
 
           {/* 증권 */}
-          <div className="relative h-full flex items-center" 
+          <div className="relative h-full flex items-center"
             onMouseEnter={() => setOpenDropdown('stock')} onMouseLeave={() => setOpenDropdown(null)}>
-            <span className="flex items-center gap-1 cursor-pointer transition-colors" 
+            <span className="flex items-center gap-1 cursor-pointer transition-colors"
               style={{ color: openDropdown === 'stock' ? '#dc2626' : 'var(--text-main)' }}>
               증권 <span className={`text-[10px] transition-transform ${openDropdown === 'stock' ? 'rotate-180' : ''}`}>▼</span>
             </span>
@@ -78,25 +78,25 @@ export default function Navbar() {
           </div>
 
           {/* 용어사전 */}
-          <div className="relative h-full flex items-center" 
+          <div className="relative h-full flex items-center"
             onMouseEnter={() => setOpenDropdown('dict')} onMouseLeave={() => setOpenDropdown(null)}>
-            <span className="flex items-center gap-1 cursor-pointer transition-colors" 
+            <span className="flex items-center gap-1 cursor-pointer transition-colors"
               style={{ color: openDropdown === 'dict' ? '#dc2626' : 'var(--text-main)' }}>
               용어사전 <span className={`text-[10px] transition-transform ${openDropdown === 'dict' ? 'rotate-180' : ''}`}>▼</span>
             </span>
             <div className={`absolute top-16 left-1/2 -translate-x-1/2 w-52 py-2 rounded-2xl border shadow-2xl transition-all ${openDropdown === 'dict' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible translate-y-2'}`}
               style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
               {dictCategories.map(cat => (
-                <Link key={cat} href={`/dictionary?cat=${cat}`} 
+                <Link key={cat} href={`/dictionary?cat=${encodeURIComponent(cat)}`}
                   className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 text-[14px] font-medium whitespace-nowrap" style={{ color: "var(--text-main)" }}>{cat}</Link>
               ))}
             </div>
           </div>
 
           {/* 추천 */}
-          <div className="relative h-full flex items-center" 
+          <div className="relative h-full flex items-center"
             onMouseEnter={() => setOpenDropdown('recommend')} onMouseLeave={() => setOpenDropdown(null)}>
-            <span className="flex items-center gap-1 cursor-pointer transition-colors" 
+            <span className="flex items-center gap-1 cursor-pointer transition-colors"
               style={{ color: openDropdown === 'recommend' ? '#dc2626' : 'var(--text-main)' }}>
               추천 <span className={`text-[10px] transition-transform ${openDropdown === 'recommend' ? 'rotate-180' : ''}`}>▼</span>
             </span>
@@ -123,13 +123,13 @@ export default function Navbar() {
             {/* 배경 흐림 처리 */}
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={closeMenu}
               className="fixed inset-0 bg-black/20 dark:bg-black/60 z-[240] backdrop-blur-[4px]" />
-            
+
             {/* 메뉴판 */}
             <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
               className="fixed inset-x-0 top-16 z-[250] overflow-hidden shadow-2xl border-b"
               style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-              
+
               <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 p-10">
                 {/* 뉴스 섹션 */}
                 <div>
@@ -137,7 +137,7 @@ export default function Navbar() {
                   <div className="flex flex-col gap-3 font-bold text-[14px]">
                     <Link href="/news" onClick={closeMenu} className="hover:text-red-600 transition-colors" style={{ color: "var(--text-main)" }}>뉴스 홈</Link>
                     {newsCategories.map(cat => (
-                      <a key={cat.id} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}`} 
+                      <a key={cat.id} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}`}
                         target="_blank" onClick={closeMenu} className="hover:text-red-600 transition-colors font-medium" style={{ color: "var(--text-main)" }}>{cat.name}</a>
                     ))}
                   </div>
@@ -157,7 +157,7 @@ export default function Navbar() {
                   <div className="text-red-600 font-black text-xs mb-4 border-b border-red-600 pb-2 uppercase tracking-widest">용어사전</div>
                   <div className="flex flex-col gap-3 font-bold text-[14px]">
                     {dictCategories.map(cat => (
-                      <Link key={cat} href={`/dictionary?cat=${cat}`} onClick={closeMenu} className="hover:text-red-600 transition-colors font-medium" style={{ color: "var(--text-main)" }}>{cat}</Link>
+                      <Link key={cat} href={`/dictionary?cat=${encodeURIComponent(cat)}`} onClick={closeMenu} className="hover:text-red-600 transition-colors font-medium" style={{ color: "var(--text-main)" }}>{cat}</Link>
                     ))}
                   </div>
                 </div>
