@@ -1,12 +1,13 @@
 import "./globals.css";
-import { Noto_Sans_KR } from "next/font/google"; // 한글 전용 폰트로 교체 제안
-import { Metadata, Viewport } from "next"; // Viewport 분리 (Next.js 14+ 권장)
+import { Noto_Sans_KR } from "next/font/google";
+import { Metadata, Viewport } from "next";
 import Navbar from "@/components/Navbar";
 
-// 한글의 굵기(Black, Bold)를 가장 잘 표현하는 폰트 설정
+// 1. variable 설정을 추가하여 CSS와 연동을 강화합니다.
 const notoSanKR = Noto_Sans_KR({ 
   subsets: ["latin"],
-  weight: ["400", "500", "700", "900"], // font-medium, bold, black을 위해 수치 지정
+  weight: ["400", "500", "700", "900"],
+  variable: "--font-noto-sans-kr", // CSS 변수 선언
 });
 
 export const metadata: Metadata = {
@@ -28,14 +29,7 @@ export const metadata: Metadata = {
     siteName: "BULL'S EYE",
     locale: "ko_KR",
     type: "website",
-    images: [
-      {
-        url: "/opengraph-image.png",
-        width: 1200,
-        height: 630,
-        alt: "BULL'S EYE 메인 미리보기",
-      },
-    ],
+    images: [{ url: "/opengraph-image.png", width: 1200, height: 630, alt: "BULL'S EYE 메인 미리보기" }],
   },
   twitter: {
     card: "summary_large_image",
@@ -52,18 +46,18 @@ export const metadata: Metadata = {
   },
 };
 
-// Next.js 최신 버전에서는 viewport를 metadata와 분리하는 것을 권장합니다.
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#dc2626", // 서비스의 포인트 컬러인 레드(Red-600) 적용
+  maximumScale: 1, // PWA에서 입력창 포커스 시 화면 확대 방지 (앱 느낌 강조)
+  userScalable: false,
+  themeColor: "#dc2626",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko" suppressHydrationWarning>
+    <html lang="ko" suppressHydrationWarning className={notoSanKR.variable}>
       <body className={notoSanKR.className}>
-        {/* Navbar를 감싸는 최소한의 wrapper 추가 (선택사항이나 구조상 안정적임) */}
         <div className="flex flex-col min-h-screen">
           <Navbar /> 
           <main className="flex-grow">
@@ -71,7 +65,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </main>
         </div>
 
-        {/* 서비스 워커 등록 스크립트 */}
         <script
           dangerouslySetInnerHTML={{
             __html: `

@@ -45,7 +45,7 @@ export default function Navbar() {
 
       {/* 메뉴 영역 */}
       <div className="flex items-center h-full">
-        {/* [PC] 상단 가로 메뉴 - 크기 15px, font-black */}
+        {/* [PC] 상단 가로 메뉴 */}
         <div className="hidden lg:flex items-center h-full gap-8 mr-6 font-black text-[15px]">
           
           {/* 뉴스 드롭다운 */}
@@ -118,7 +118,7 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* 전체 메뉴 레이어 */}
+      {/* 전체 메뉴 레이어 (모든 텍스트 font-medium 통일) */}
       <AnimatePresence>
         {isFullMenuOpen && (
           <>
@@ -130,11 +130,11 @@ export default function Navbar() {
               style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
               
               <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 p-10">
-                {/* 각 섹션별 폰트 통일 (text-[14px], font-bold/font-medium) */}
+                {/* 뉴스 섹션 */}
                 <div>
                   <div className="text-red-600 font-black text-xs mb-4 border-b border-red-600 pb-2 uppercase tracking-widest">뉴스</div>
                   <div className="flex flex-col gap-3 text-[14px]">
-                    <Link href="/news" onClick={closeMenu} className="font-bold hover:text-red-600" style={{ color: "var(--text-main)" }}>뉴스 홈</Link>
+                    <Link href="/news" onClick={closeMenu} className="font-medium hover:text-red-600" style={{ color: "var(--text-main)" }}>뉴스 홈</Link>
                     {newsCategories.map(cat => (
                       <a key={cat.id} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}`} 
                         target="_blank" onClick={closeMenu} className="font-medium hover:text-red-600" style={{ color: "var(--text-main)" }}>{cat.name}</a>
@@ -142,14 +142,16 @@ export default function Navbar() {
                   </div>
                 </div>
 
+                {/* 증권 섹션 */}
                 <div>
                   <div className="text-red-600 font-black text-xs mb-4 border-b border-red-600 pb-2 uppercase tracking-widest">증권</div>
                   <div className="flex flex-col gap-3 text-[14px]">
-                    <Link href="/stock?tab=list" onClick={closeMenu} className="font-bold hover:text-red-600" style={{ color: "var(--text-main)" }}>증권사 목록</Link>
-                    <Link href="/stock?tab=guide" onClick={closeMenu} className="font-bold hover:text-red-600" style={{ color: "var(--text-main)" }}>계좌 가이드</Link>
+                    <Link href="/stock?tab=list" onClick={closeMenu} className="font-medium hover:text-red-600" style={{ color: "var(--text-main)" }}>증권사 목록</Link>
+                    <Link href="/stock?tab=guide" onClick={closeMenu} className="font-medium hover:text-red-600" style={{ color: "var(--text-main)" }}>계좌 가이드</Link>
                   </div>
                 </div>
 
+                {/* 용어사전 섹션 */}
                 <div>
                   <div className="text-red-600 font-black text-xs mb-4 border-b border-red-600 pb-2 uppercase tracking-widest">용어사전</div>
                   <div className="flex flex-col gap-3 text-[14px]">
@@ -160,12 +162,13 @@ export default function Navbar() {
                   </div>
                 </div>
 
+                {/* 추천 섹션 */}
                 <div>
                   <div className="text-red-600 font-black text-xs mb-4 border-b border-red-600 pb-2 uppercase tracking-widest">추천</div>
                   <div className="flex flex-col gap-3 text-[14px]">
                     {recommendTabs.map(tab => (
                       <Link key={tab.slug} href={`/recommend?tab=${tab.slug}`} onClick={closeMenu} 
-                        className="font-bold hover:text-red-600" style={{ color: "var(--text-main)" }}>{tab.name}</Link>
+                        className="font-medium hover:text-red-600" style={{ color: "var(--text-main)" }}>{tab.name}</Link>
                     ))}
                   </div>
                 </div>
