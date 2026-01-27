@@ -4,24 +4,33 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 export default function SettingsPage() {
+  // 1. 초기 상태는 전부 꺼진 상태(false)로 시작
   const [settings, setSettings] = useState({
-    darkMode: true,
-    marketAlert: true,
-    newsLetter: false, // 이게 '가이드 우선 표시' 스위치입니다
+    darkMode: false, 
+    marketAlert: false,
+    newsLetter: false,
   });
+  
+  // 2. 마운트 확인용 상태 추가 (서버와 클라이언트 불일치 방지)
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     const savedMarketAlert = localStorage.getItem("marketAlert");
     const savedNewsLetter = localStorage.getItem("newsLetter");
 
+    // 3. 실제 저장된 값을 읽어서 업데이트
     setSettings({
-      darkMode: savedTheme === "dark" || savedTheme === null,
+      // 테마가 'dark'거나 아예 처음 방문(null)일 때만 true
+      darkMode: savedTheme === "dark" || (savedTheme === null && document.documentElement.classList.contains("dark")),
       marketAlert: savedMarketAlert !== "false",
       newsLetter: savedNewsLetter === "true",
     });
+
+    setMounted(true); // 이제 화면에 그려도 된다고 신호 줌
   }, []);
 
+  // (중략: toggleSetting, resetAllData 함수는 그대로 두시면 됩니다)
   const toggleSetting = (key: keyof typeof settings) => {
     const newValue = !settings[key];
     setSettings((prev) => ({ ...prev, [key]: newValue }));
@@ -42,6 +51,9 @@ export default function SettingsPage() {
       window.location.reload();
     }
   };
+
+  // 4. 마운트 되기 전(useEffect 전)에는 렌더링하지 않음
+  if (!mounted) return null;
 
   return (
     <div className="min-h-screen transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
