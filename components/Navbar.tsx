@@ -144,10 +144,14 @@ export default function Navbar() {
           <>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={closeMenu}
               className="fixed inset-0 bg-black/20 dark:bg-black/60 z-[240] backdrop-blur-[4px]" />
-            <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              className="fixed inset-x-0 top-16 z-[250] overflow-hidden shadow-2xl border-b"
-              style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+              className="fixed inset-x-0 top-16 z-[250] shadow-2xl border-b max-h-[calc(100dvh-64px)] overflow-y-auto"
+              style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}
+            >
 
               <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-6 gap-8 p-10">
                 <div>
