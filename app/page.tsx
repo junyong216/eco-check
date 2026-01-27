@@ -5,7 +5,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import AdSense from "@/components/AdSense";
 
-// --- 애니메이션 설정 ---
 const fadeInUp = {
   initial: { opacity: 0, y: 40 },
   whileInView: { opacity: 1, y: 0 },
@@ -23,24 +22,32 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [exchangeRate, setExchangeRate] = useState({ rate: "---", change: "+0.0" });
   const [fearGreed, setFearGreed] = useState({ value: 0, label: "로딩 중" });
+
+  // ✅ 설정값 상태들
   const [isGuideFirst, setIsGuideFirst] = useState(false);
+  const [showMarketData, setShowMarketData] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // 1. 설정값들 읽어오기
+    const savedMarketAlert = localStorage.getItem("marketAlert");
+    const savedGuideSetting = localStorage.getItem("newsLetter") === "true";
+
+    // "false"라고 명시되어 있을 때만 끄고, 기본값은 켬(true)
+    setShowMarketData(savedMarketAlert !== "false");
+    setIsGuideFirst(savedGuideSetting);
+
     fetchMarketData();
-    // 뉴스레터/가이드 우선순위 설정 반영
-    const savedSetting = localStorage.getItem("newsLetter") === "true";
-    setIsGuideFirst(savedSetting);
+    setMounted(true);
   }, []);
 
   const fetchMarketData = async () => {
     setIsLoading(true);
     try {
-      // 1. 환율 데이터 (USD/KRW)
       const exResponse = await fetch("https://open.er-api.com/v6/latest/USD");
       const exData = await exResponse.json();
       const krwRate = exData.rates.KRW.toFixed(1);
 
-      // 2. 공포 & 탐욕 지수
       const fgResponse = await fetch("https://api.alternative.me/fng/");
       const fgData = await fgResponse.json();
       const value = parseInt(fgData.data[0].value);
@@ -68,7 +75,6 @@ export default function Home() {
     window.open(`https://search.naver.com/search.naver?query=${encodeURIComponent(searchTerm + " 주가")}`, "_blank");
   };
 
-  // --- 메인 메뉴 버튼 동적 정렬 ---
   const baseButtons = [
     { id: 'news', label: '뉴스' },
     { id: 'stock', label: '증권' },
@@ -80,6 +86,9 @@ export default function Home() {
   const sortedButtons = isGuideFirst
     ? [baseButtons.find(b => b.id === 'guide')!, ...baseButtons.filter(b => b.id !== 'guide')]
     : baseButtons;
+
+  // 하이드레이션 오류 및 깜빡임 방지
+  if (!mounted) return <div className="min-h-screen" style={{ backgroundColor: "var(--bg-color)" }} />;
 
   return (
     <div className="min-h-[100dvh] flex flex-col transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
@@ -147,33 +156,35 @@ export default function Home() {
           </div>
         </div>
 
-        {/* 지표 데이터 섹션 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-          {isLoading ? (
-            <div className="col-span-full py-20 text-center font-black animate-pulse text-red-600 uppercase italic">Targeting Market Data...</div>
-          ) : (
-            <>
-              <motion.div variants={fadeInUp} initial="initial" whileInView="whileInView"
-                className="p-10 md:p-14 rounded-[40px] border-2 hover:border-red-600 transition-all group"
-                style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-                <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-red-600 mb-6 opacity-60 group-hover:opacity-100">USD / KRW</h3>
-                <div className="text-5xl md:text-7xl font-black text-red-600 tracking-tighter">
-                  {exchangeRate.rate} <span className="text-lg opacity-30 italic" style={{ color: "var(--text-main)" }}>KRW</span>
-                </div>
-              </motion.div>
+        {/* ✅ 지표 데이터 섹션 (설정에 따라 보이기/숨기기) */}
+        {showMarketData && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+            {isLoading ? (
+              <div className="col-span-full py-20 text-center font-black animate-pulse text-red-600 uppercase italic">Targeting Market Data...</div>
+            ) : (
+              <>
+                <motion.div variants={fadeInUp} initial="initial" whileInView="whileInView"
+                  className="p-10 md:p-14 rounded-[40px] border-2 hover:border-red-600 transition-all group"
+                  style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+                  <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-red-600 mb-6 opacity-60 group-hover:opacity-100">USD / KRW</h3>
+                  <div className="text-5xl md:text-7xl font-black text-red-600 tracking-tighter">
+                    {exchangeRate.rate} <span className="text-lg opacity-30 italic" style={{ color: "var(--text-main)" }}>KRW</span>
+                  </div>
+                </motion.div>
 
-              <motion.div variants={fadeInUp} initial="initial" whileInView="whileInView"
-                className="p-10 md:p-14 rounded-[40px] border-2 hover:border-red-600 transition-all group relative"
-                style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-                <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-red-600 mb-6 opacity-60 group-hover:opacity-100">Market Sentiment</h3>
-                <div className="flex items-baseline gap-3">
-                  <span className="text-5xl md:text-7xl font-black tracking-tighter">{fearGreed.value}</span>
-                  <span className="text-xl md:text-3xl font-black text-red-500 italic uppercase underline decoration-4 decoration-red-200">{fearGreed.label}</span>
-                </div>
-              </motion.div>
-            </>
-          )}
-        </div>
+                <motion.div variants={fadeInUp} initial="initial" whileInView="whileInView"
+                  className="p-10 md:p-14 rounded-[40px] border-2 hover:border-red-600 transition-all group relative"
+                  style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+                  <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-red-600 mb-6 opacity-60 group-hover:opacity-100">Market Sentiment</h3>
+                  <div className="flex items-baseline gap-3">
+                    <span className="text-5xl md:text-7xl font-black tracking-tighter">{fearGreed.value}</span>
+                    <span className="text-xl md:text-3xl font-black text-red-500 italic uppercase underline decoration-4 decoration-red-200">{fearGreed.label}</span>
+                  </div>
+                </motion.div>
+              </>
+            )}
+          </div>
+        )}
 
         <div className="my-10"><AdSense slot="1234567890" format="fluid" /></div>
 
