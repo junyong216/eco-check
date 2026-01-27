@@ -46,66 +46,68 @@ export default function Navbar() {
       {/* 메뉴 영역 */}
       <div className="flex items-center h-full">
         {/* [PC] 상단 가로 메뉴 */}
-        <div className="hidden lg:flex items-center h-full gap-8 mr-6 font-black text-[15px]">
-          
+        {/* font-black을 font-bold로 낮추고, 가독성을 위해 자간(tracking-tight)을 조정했습니다 */}
+        <div className="hidden lg:flex items-center h-full gap-8 mr-6 font-bold text-[15px] tracking-tight">
+
           {/* 뉴스 드롭다운 */}
-          <div className="relative h-full flex items-center" 
+          <div className="relative h-full flex items-center"
             onMouseEnter={() => setOpenDropdown('news')} onMouseLeave={() => setOpenDropdown(null)}>
-            <span className="flex items-center gap-1 cursor-pointer transition-colors" 
+            <span className="flex items-center gap-1 cursor-pointer transition-colors"
               style={{ color: openDropdown === 'news' ? '#dc2626' : 'var(--text-main)' }}>
               뉴스 <span className={`text-[10px] transition-transform ${openDropdown === 'news' ? 'rotate-180' : ''}`}>▼</span>
             </span>
+            {/* 드롭다운 내부 글씨체를 모바일과 같은 font-medium으로 통일 */}
             <div className={`absolute top-16 left-1/2 -translate-x-1/2 w-48 py-2 rounded-2xl border shadow-2xl transition-all ${openDropdown === 'news' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible translate-y-2'}`}
               style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-              <Link href="/news" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 text-[14px] font-bold" style={{ color: "var(--text-main)" }}>뉴스 홈</Link>
+              <Link href="/news" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 text-[14px] font-medium" style={{ color: "var(--text-main)" }}>뉴스 홈</Link>
               {newsCategories.map(cat => (
-                <a key={cat.id} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}`} target="_blank" 
+                <a key={cat.id} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}`} target="_blank"
                   className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 text-[14px] font-medium" style={{ color: "var(--text-main)" }}>{cat.name}</a>
               ))}
             </div>
           </div>
 
           {/* 증권 드롭다운 */}
-          <div className="relative h-full flex items-center" 
+          <div className="relative h-full flex items-center"
             onMouseEnter={() => setOpenDropdown('stock')} onMouseLeave={() => setOpenDropdown(null)}>
-            <span className="flex items-center gap-1 cursor-pointer transition-colors" 
+            <span className="flex items-center gap-1 cursor-pointer transition-colors"
               style={{ color: openDropdown === 'stock' ? '#dc2626' : 'var(--text-main)' }}>
               증권 <span className={`text-[10px] transition-transform ${openDropdown === 'stock' ? 'rotate-180' : ''}`}>▼</span>
             </span>
             <div className={`absolute top-16 left-1/2 -translate-x-1/2 w-48 py-2 rounded-2xl border shadow-2xl transition-all ${openDropdown === 'stock' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible translate-y-2'}`}
               style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-              <Link href="/stock?tab=list" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 text-[14px] font-bold" style={{ color: "var(--text-main)" }}>증권사 목록</Link>
-              <Link href="/stock?tab=guide" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 text-[14px] font-bold" style={{ color: "var(--text-main)" }}>계좌 가이드</Link>
+              <Link href="/stock?tab=list" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 text-[14px] font-medium" style={{ color: "var(--text-main)" }}>증권사 목록</Link>
+              <Link href="/stock?tab=guide" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 text-[14px] font-medium" style={{ color: "var(--text-main)" }}>계좌 가이드</Link>
             </div>
           </div>
 
           {/* 용어사전 드롭다운 */}
-          <div className="relative h-full flex items-center" 
+          <div className="relative h-full flex items-center"
             onMouseEnter={() => setOpenDropdown('dict')} onMouseLeave={() => setOpenDropdown(null)}>
-            <span className="flex items-center gap-1 cursor-pointer transition-colors" 
+            <span className="flex items-center gap-1 cursor-pointer transition-colors"
               style={{ color: openDropdown === 'dict' ? '#dc2626' : 'var(--text-main)' }}>
               용어사전 <span className={`text-[10px] transition-transform ${openDropdown === 'dict' ? 'rotate-180' : ''}`}>▼</span>
             </span>
             <div className={`absolute top-16 left-1/2 -translate-x-1/2 w-52 py-2 rounded-2xl border shadow-2xl transition-all ${openDropdown === 'dict' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible translate-y-2'}`}
               style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
               {dictCategories.map(cat => (
-                <Link key={cat} href={`/dictionary?cat=${encodeURIComponent(cat)}`} 
+                <Link key={cat} href={`/dictionary?cat=${encodeURIComponent(cat)}`}
                   className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 text-[14px] font-medium whitespace-nowrap" style={{ color: "var(--text-main)" }}>{cat}</Link>
               ))}
             </div>
           </div>
 
           {/* 추천 드롭다운 */}
-          <div className="relative h-full flex items-center" 
+          <div className="relative h-full flex items-center"
             onMouseEnter={() => setOpenDropdown('recommend')} onMouseLeave={() => setOpenDropdown(null)}>
-            <span className="flex items-center gap-1 cursor-pointer transition-colors" 
+            <span className="flex items-center gap-1 cursor-pointer transition-colors"
               style={{ color: openDropdown === 'recommend' ? '#dc2626' : 'var(--text-main)' }}>
               추천 <span className={`text-[10px] transition-transform ${openDropdown === 'recommend' ? 'rotate-180' : ''}`}>▼</span>
             </span>
             <div className={`absolute top-16 left-1/2 -translate-x-1/2 w-48 py-2 rounded-2xl border shadow-2xl transition-all ${openDropdown === 'recommend' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible translate-y-2'}`}
               style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-              <Link href="/recommend?tab=books" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 text-[14px] font-bold" style={{ color: "var(--text-main)" }}>추천 도서</Link>
-              <Link href="/recommend?tab=videos" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 text-[14px] font-bold" style={{ color: "var(--text-main)" }}>추천 영상</Link>
+              <Link href="/recommend?tab=books" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 text-[14px] font-medium" style={{ color: "var(--text-main)" }}>추천 도서</Link>
+              <Link href="/recommend?tab=videos" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 text-[14px] font-medium" style={{ color: "var(--text-main)" }}>추천 영상</Link>
             </div>
           </div>
         </div>
@@ -128,7 +130,7 @@ export default function Navbar() {
               transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
               className="fixed inset-x-0 top-16 z-[250] overflow-hidden shadow-2xl border-b"
               style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-              
+
               <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 p-10">
                 {/* 뉴스 섹션 */}
                 <div>
@@ -136,7 +138,7 @@ export default function Navbar() {
                   <div className="flex flex-col gap-3 text-[14px]">
                     <Link href="/news" onClick={closeMenu} className="font-medium hover:text-red-600" style={{ color: "var(--text-main)" }}>뉴스 홈</Link>
                     {newsCategories.map(cat => (
-                      <a key={cat.id} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}`} 
+                      <a key={cat.id} href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(cat.query)}`}
                         target="_blank" onClick={closeMenu} className="font-medium hover:text-red-600" style={{ color: "var(--text-main)" }}>{cat.name}</a>
                     ))}
                   </div>
@@ -156,7 +158,7 @@ export default function Navbar() {
                   <div className="text-red-600 font-black text-xs mb-4 border-b border-red-600 pb-2 uppercase tracking-widest">용어사전</div>
                   <div className="flex flex-col gap-3 text-[14px]">
                     {dictCategories.map(cat => (
-                      <Link key={cat} href={`/dictionary?cat=${encodeURIComponent(cat)}`} onClick={closeMenu} 
+                      <Link key={cat} href={`/dictionary?cat=${encodeURIComponent(cat)}`} onClick={closeMenu}
                         className="font-medium hover:text-red-600" style={{ color: "var(--text-main)" }}>{cat}</Link>
                     ))}
                   </div>
@@ -167,7 +169,7 @@ export default function Navbar() {
                   <div className="text-red-600 font-black text-xs mb-4 border-b border-red-600 pb-2 uppercase tracking-widest">추천</div>
                   <div className="flex flex-col gap-3 text-[14px]">
                     {recommendTabs.map(tab => (
-                      <Link key={tab.slug} href={`/recommend?tab=${tab.slug}`} onClick={closeMenu} 
+                      <Link key={tab.slug} href={`/recommend?tab=${tab.slug}`} onClick={closeMenu}
                         className="font-medium hover:text-red-600" style={{ color: "var(--text-main)" }}>{tab.name}</Link>
                     ))}
                   </div>
