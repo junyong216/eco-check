@@ -4,33 +4,34 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 export default function SettingsPage() {
-  // 1. 초기 상태는 전부 꺼진 상태(false)로 시작
+  // 1. 초기값은 무조건 false로 고정 (서버 렌더링 시 깜빡임 방지)
   const [settings, setSettings] = useState({
     darkMode: false, 
     marketAlert: false,
     newsLetter: false,
   });
   
-  // 2. 마운트 확인용 상태 추가 (서버와 클라이언트 불일치 방지)
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // 2. 클라이언트 마운트 즉시 데이터 로드
     const savedTheme = localStorage.getItem("theme");
     const savedMarketAlert = localStorage.getItem("marketAlert");
     const savedNewsLetter = localStorage.getItem("newsLetter");
 
-    // 3. 실제 저장된 값을 읽어서 업데이트
+    // 실제 HTML 클래스 상태까지 체크해서 모바일 정확도 향상
+    const isSystemDark = document.documentElement.classList.contains("dark");
+
     setSettings({
-      // 테마가 'dark'거나 아예 처음 방문(null)일 때만 true
-      darkMode: savedTheme === "dark" || (savedTheme === null && document.documentElement.classList.contains("dark")),
+      darkMode: savedTheme === "dark" || (savedTheme === null && isSystemDark),
       marketAlert: savedMarketAlert !== "false",
       newsLetter: savedNewsLetter === "true",
     });
 
-    setMounted(true); // 이제 화면에 그려도 된다고 신호 줌
+    // 3. 브라우저가 화면을 그릴 준비가 된 직후에 UI 노출
+    setMounted(true);
   }, []);
 
-  // (중략: toggleSetting, resetAllData 함수는 그대로 두시면 됩니다)
   const toggleSetting = (key: keyof typeof settings) => {
     const newValue = !settings[key];
     setSettings((prev) => ({ ...prev, [key]: newValue }));
@@ -52,8 +53,12 @@ export default function SettingsPage() {
     }
   };
 
-  // 4. 마운트 되기 전(useEffect 전)에는 렌더링하지 않음
-  if (!mounted) return null;
+  // ✅ 모바일 깜빡임 방지용 스타일 헬퍼
+  // 마운트 전에는 opacity-0으로 숨겼다가 데이터 매칭 완료되면 스윽 보여줌
+  const toggleClass = (isActive: boolean) => 
+    `w-14 h-8 rounded-full flex items-center px-1 transition-all duration-300 ${
+      !mounted ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+    } ${isActive ? 'bg-red-600 justify-end' : 'bg-gray-300 justify-start'}`;
 
   return (
     <div className="min-h-screen transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
@@ -70,7 +75,8 @@ export default function SettingsPage() {
               <h3 className="text-xl font-bold">다크 모드</h3>
               <p className="text-sm opacity-50">어두운 테마 사용</p>
             </div>
-            <button onClick={() => toggleSetting('darkMode')} className={`w-14 h-8 rounded-full transition-all flex items-center px-1 ${settings.darkMode ? 'bg-red-600 justify-end' : 'bg-gray-300 justify-start'}`}>
+            {/* ✅ 모바일 최적화 클래스 적용 */}
+            <button onClick={() => toggleSetting('darkMode')} className={toggleClass(settings.darkMode)}>
               <div className="w-6 h-6 bg-white rounded-full shadow-md" />
             </button>
           </div>
@@ -84,7 +90,7 @@ export default function SettingsPage() {
                 <h3 className="text-xl font-bold">시장 지표 요약 보기</h3>
                 <p className="text-sm opacity-50">홈 화면 상단 지수 표시</p>
               </div>
-              <button onClick={() => toggleSetting('marketAlert')} className={`w-14 h-8 rounded-full transition-all flex items-center px-1 ${settings.marketAlert ? 'bg-red-600 justify-end' : 'bg-gray-300 justify-start'}`}>
+              <button onClick={() => toggleSetting('marketAlert')} className={toggleClass(settings.marketAlert)}>
                 <div className="w-6 h-6 bg-white rounded-full shadow-md" />
               </button>
             </div>
@@ -93,7 +99,7 @@ export default function SettingsPage() {
                 <h3 className="text-xl font-bold">전문가 가이드 우선 표시</h3>
                 <p className="text-sm opacity-50">뉴스보다 가이드 버튼을 앞에 배치</p>
               </div>
-              <button onClick={() => toggleSetting('newsLetter')} className={`w-14 h-8 rounded-full transition-all flex items-center px-1 ${settings.newsLetter ? 'bg-red-600 justify-end' : 'bg-gray-300 justify-start'}`}>
+              <button onClick={() => toggleSetting('newsLetter')} className={toggleClass(settings.newsLetter)}>
                 <div className="w-6 h-6 bg-white rounded-full shadow-md" />
               </button>
             </div>
