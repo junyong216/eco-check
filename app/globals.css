@@ -2,12 +2,12 @@
 
 /* 1. 변수 정의 및 기본 스타일 */
 :root {
-  --bg-color: #F8FAFC;    /* 조금 더 맑은 느낌의 연회색 */
+  --bg-color: #F8FAFC;
   --card-bg: #ffffff;
   --text-main: #0F172A;
-  --text-sub: #475569;    /* 가독성을 위해 살짝 더 진하게 조정 */
+  --text-sub: #475569;
   --border-color: #E2E8F0;
-  --accent-color: #dc2626; /* Navbar의 로고 및 포인트 컬러와 통일 */
+  --accent-color: #dc2626;
   --accent-hover: #b91c1c;
   --ad-bg: #f1f5f9;
 }
@@ -17,47 +17,51 @@ html.dark {
   --bg-color: #0F172A;
   --card-bg: #1E293B;
   --text-main: #F1F5F9;
-  --text-sub: #CBD5E1;    /* 다크모드에서 더 잘 보이도록 밝게 조정 */
+  --text-sub: #CBD5E1;
   --border-color: #334155;
   --accent-color: #fb7185;
   --ad-bg: #1e293b;
 }
 
-/* 3. 기본 설정 부분 (보강) */
+/* 3. 기본 설정 부분 - 오류 수정 및 최적화 */
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg-color);
+}
+
 body {
   background-color: var(--bg-color);
   color: var(--text-main);
   margin: 0;
-  
-  /* 기본 굵기를 400으로 잡아두면 Navbar의 medium(500)과 black(900)이 더 돋보입니다 */
   font-weight: 400; 
-  
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+
+  /* ✅ 모바일 전체 화면 높이 최적화 */
+  min-height: 100vh;
+  min-height: 100dvh; 
+  display: flex;
+  flex-direction: column;
 
   transition: background-color 0.3s, color 0.3s;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   
   font-family: inherit; 
-  
   word-break: keep-all;
   overflow-wrap: break-word;
 }
 
-/* 4. 유틸리티 클래스 (미세 조정) */
+/* 4. 유틸리티 클래스 */
 .theme-card { 
   background-color: var(--card-bg); 
   border: 1px solid var(--border-color);
   border-radius: 1rem;
-  /* 호버 시 테두리 색상 변화가 더 부드럽게 보이도록 transition 추가 */
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .theme-card:hover {
   border-color: var(--accent-color);
-  /* 그림자를 조금 더 투명하게 하여 고급스러운 느낌 강조 */
   box-shadow: 0 12px 24px -8px rgba(220, 38, 38, 0.12);
-  transform: translateY(-2px); /* 살짝 떠오르는 효과 추가 */
+  transform: translateY(-2px);
 }
 
 /* 5. 애드센스 광고 컨테이너 */
@@ -67,18 +71,18 @@ ins.adsbygoogle {
   overflow: hidden;
   margin: 24px 0;
   display: block;
-  min-height: 100px; /* 최소 높이 설정으로 깜빡임 방지 */
+  min-height: 100px;
 }
 
-/* 6. 인터랙션 최적화 (모바일 웹 앱 느낌 강화) */
+/* 6. 인터랙션 최적화 */
 * {
   -webkit-tap-highlight-color: transparent;
   box-sizing: border-box;
-  /* 텍스트 드래그 시 브랜드 컬러 적용 (디테일) */
-  ::selection {
-    background-color: var(--accent-color);
-    color: white;
-  }
+}
+
+::selection {
+  background-color: var(--accent-color);
+  color: white;
 }
 
 /* 버튼 및 링크 클릭 반응 */
@@ -87,7 +91,7 @@ button:active, a:active {
   transition: transform 0.1s;
 }
 
-/* 이미지 드래그 방지 (앱 느낌 강조) */
+/* 이미지 드래그 방지 */
 img {
   -webkit-user-drag: none;
   user-select: none;
@@ -95,19 +99,15 @@ img {
 
 /* 7. 애니메이션 및 커스텀 효과 */
 @keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
 .animate-shimmer {
   animation: shimmer 2s infinite;
 }
 
-/* 스크롤바 커스텀 (필요시 유지) */
+/* 스크롤바 커스텀 */
 ::-webkit-scrollbar {
   width: 6px;
 }

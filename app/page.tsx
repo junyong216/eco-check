@@ -77,14 +77,14 @@ export default function Home() {
     { id: 'guide', label: '투자가이드' }
   ];
 
-  const sortedButtons = isGuideFirst 
+  const sortedButtons = isGuideFirst
     ? [baseButtons.find(b => b.id === 'guide')!, ...baseButtons.filter(b => b.id !== 'guide')]
     : baseButtons;
 
   return (
-    <div className="min-h-screen transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
+    <div className="min-h-[100dvh] flex flex-col transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
       <main className="max-w-6xl mx-auto px-4 py-8 md:py-24 relative z-10">
-        
+
         {/* 히어로 섹션 */}
         <motion.section
           initial={{ opacity: 0, scale: 0.98 }}
@@ -153,7 +153,7 @@ export default function Home() {
             <div className="col-span-full py-20 text-center font-black animate-pulse text-red-600 uppercase italic">Targeting Market Data...</div>
           ) : (
             <>
-              <motion.div variants={fadeInUp} initial="initial" whileInView="whileInView" 
+              <motion.div variants={fadeInUp} initial="initial" whileInView="whileInView"
                 className="p-10 md:p-14 rounded-[40px] border-2 hover:border-red-600 transition-all group"
                 style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
                 <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-red-600 mb-6 opacity-60 group-hover:opacity-100">USD / KRW</h3>
@@ -183,9 +183,8 @@ export default function Home() {
             <motion.div key={item.id} variants={fadeInUp}>
               <Link
                 href={`/${item.id}`}
-                className={`block py-8 rounded-[24px] border-2 text-center font-black text-base md:text-lg transition-all uppercase italic tracking-tighter ${
-                  item.id === 'guide' && isGuideFirst ? 'border-red-600 text-red-600 bg-red-50 dark:bg-red-900/10' : ''
-                } hover:border-red-600 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10`}
+                className={`block py-8 rounded-[24px] border-2 text-center font-black text-base md:text-lg transition-all uppercase italic tracking-tighter ${item.id === 'guide' && isGuideFirst ? 'border-red-600 text-red-600 bg-red-50 dark:bg-red-900/10' : ''
+                  } hover:border-red-600 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10`}
                 style={{ backgroundColor: "var(--card-bg)", borderColor: item.id === 'guide' && isGuideFirst ? "#dc2626" : "var(--border-color)" }}
               >
                 {item.label}
@@ -207,7 +206,7 @@ export default function Home() {
       </motion.section>
 
       {/* 푸터 */}
-      <footer className="py-16 md:py-24" style={{ backgroundColor: "var(--card-bg)", borderTop: "2px solid var(--border-color)" }}>
+      <footer className="py-16 md:py-24 pb-[calc(env(safe-area-inset-bottom)+2rem)]" style={{ backgroundColor: "var(--card-bg)", borderTop: "2px solid var(--border-color)" }}>
         <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
           <div>
             <div className="font-black text-3xl text-red-600 mb-6 tracking-tighter italic uppercase">BULL'S EYE</div>
