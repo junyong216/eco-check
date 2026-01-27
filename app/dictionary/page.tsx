@@ -3,28 +3,12 @@
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
-import DarkModeToggle from "@/components/DarkModeToggle";
 import AdSense from "@/components/AdSense";
 
-const newsCategories = [
-  { id: "market", name: "시장지표", query: "시장지표" },
-  { id: "interest", name: "금리이슈", query: "금리전망" },
-  { id: "stock", name: "주식뉴스", query: "주식시황" },
-  { id: "crypto", name: "가상자산", query: "비트코인" },
-  { id: "realestate", name: "부동산", query: "부동산전망" },
-  { id: "global", name: "해외경제", query: "글로벌경제" },
-];
 const dictCategories = ["전체", "주식기초", "재무제표", "거시경제", "투자전략", "미국/해외주식", "지수/상품"];
-const recommendTabs = [
-  { name: "추천 도서", slug: "books" },
-  { name: "추천 영상", slug: "videos" }
-];
 
 function DictionaryContent() {
   const searchParams = useSearchParams();
-  const [isFullMenuOpen, setIsFullMenuOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState("전체");
 
@@ -67,6 +51,7 @@ function DictionaryContent() {
     { category: "거시경제", word: "점도표", desc: "미국 연준 위원들이 예상하는 미래 금리 수준을 점으로 찍어 나타낸 표로, 금리 향방의 가이드가 됩니다." },
     { category: "거시경제", word: "FOMC", desc: "미국의 중앙은행인 연준(Fed)이 금리 결정 등 주요 통화 정책을 결정하는 정례 회의입니다." },
     { category: "거시경제", word: "베이비스텝 & 빅스텝", desc: "금리를 0.25%p 올리는 것을 베이비스텝, 0.5%p 올리는 것을 빅스텝이라고 부릅니다." },
+    { category: "거시경제", word: "월가 (Wall Street)", desc: "미국 뉴욕에 있는 세계 금융의 중심지입니다. 주요 투자은행, 증권사, 거래소가 모여 있어 전 세계 돈의 흐름을 결정하는 상징적인 장소로 통합니다." },
     { category: "투자전략", word: "분할매수", desc: "리스크를 줄이기 위해 주식을 한 번에 다 사지 않고, 여러 번에 나누어 담는 전략입니다." },
     { category: "투자전략", word: "포트폴리오", desc: "분산 투자를 위해 내 자산을 여러 종목이나 자산군(주식, 채권 등)에 나누어 담은 리스트입니다." },
     { category: "투자전략", word: "손절매", desc: "더 큰 손해를 막기 위해 내가 산 가격보다 낮은 가격이라도 과감히 주식을 파는 것입니다." },
@@ -77,15 +62,15 @@ function DictionaryContent() {
     { category: "투자전략", word: "배당성향", desc: "기업이 벌어들인 순이익 중 얼마를 주주에게 배당으로 주는지 나타내는 비율입니다. 이 비율이 높을수록 주주 환원에 적극적인 기업입니다." },
     { category: "투자전략", word: "안전마진", desc: "기업의 실제 가치보다 주가가 훨씬 낮게 거래될 때의 차이를 말합니다. 손실을 보지 않기 위해 확보하는 심리적, 수치적 여유분입니다." },
     { category: "투자전략", word: "선물거래 (Futures)", desc: "미래의 특정 시점에 정해진 가격으로 상품을 사고팔기로 약속하는 거래입니다. 주가 하락이 예상될 때 수익을 내는 '숏(Short)' 포지션이 가능하며, 적은 돈으로 큰 수익을 노리는 레버리지가 가능하지만 그만큼 손실 위험도 매우 큽니다." },
-    { category: "투자전략", word: "롱 (Long) & 숏 (Short)", desc: "주가가 오를 것에 투자하는 것을 '롱(매수)', 주가가 내려갈 것에 투자하는 것을 '숏(공매도/매도)'이라고 합니다. 선물거래에서는 시장의 상승과 하락 양방향 모두에 투자하여 수익을 낼 수 있는 기회가 있습니다." },
-    { category: "투자전략", word: "레버리지 (Leverage)", desc: "지렛대라는 뜻으로, 실제 가진 돈보다 몇 배 더 많은 금액을 투자하는 기법입니다. 수익이 나면 배로 벌지만, 반대로 주가가 조금만 반대로 움직여도 원금을 모두 잃을 수 있는 '청산'의 위험이 있습니다." },
+    { category: "투자전략", word: "롱 (Long) & 숏 (Short)", desc: "주가가 오를 것에 투자하는 것을 '롱(매수)', 주가가 내려갈 것에 투자하는 것을 '숏(공매도/매도)'이라고 합니다." },
+    { category: "투자전략", word: "레버리지 (Leverage)", desc: "지렛대라는 뜻으로, 실제 가진 돈보다 몇 배 더 많은 금액을 투자하는 기법입니다." },
     { category: "투자전략", word: "커버드콜", desc: "주식을 보유하면서 동시에 콜옵션을 팔아 주가 하락 시 손실을 방어하고 추가 수익을 얻는 전략입니다." },
     { category: "투자전략", word: "디폴트", desc: "국가나 기업이 빌린 돈의 원금이나 이자를 정해진 기간 안에 갚지 못하는 채무불이행 상태를 말합니다." },
-    { category: "미국/해외주식", word: "나스닥 (NASDAQ)", desc: "미국의 대표적인 IT/기술주 중심의 거래소입니다. 애플, 구글 등 혁신 기업들이 대거 상장되어 있어 전 세계 기술주 흐름의 척도가 됩니다." },
-    { category: "미국/해외주식", word: "다우 지수 (Dow Jones)", desc: "미국에서 가장 오래된 주가지수로, 대표적인 우량 기업 30개를 선정해 주가 평균을 산출합니다. 전통적인 대형주들의 흐름을 보여줍니다." },
+    { category: "미국/해외주식", word: "나스닥 (NASDAQ)", desc: "미국의 대표적인 IT/기술주 중심의 거래소입니다. 애플, 구글 등 혁신 기업들이 대거 상장되어 있습니다." },
+    { category: "미국/해외주식", word: "다우 지수 (Dow Jones)", desc: "미국에서 가장 오래된 주가지수로, 대표적인 우량 기업 30개를 선정해 주가 평균을 산출합니다." },
     { category: "미국/해외주식", word: "양도소득세", desc: "해외 주식 투자로 얻은 수익이 연 250만 원을 넘을 경우, 초과 수익의 22%를 국가에 내는 세금입니다." },
     { category: "미국/해외주식", word: "서학개미", desc: "국내 주식 시장을 넘어 미국 등 해외 주식에 직접 투자하는 한국 개인 투자자들을 일컫는 말입니다." },
-    { category: "미국/해외주식", word: "애프터마켓 (After Market)", desc: "정규 시장이 끝난 뒤에 열리는 시간 외 거래 시장입니다. 미국 주식은 시차 때문에 이 시간대의 변동성을 확인하는 것이 중요합니다." },
+    { category: "미국/해외주식", word: "애프터마켓 (After Market)", desc: "정규 시장이 끝난 뒤에 열리는 시간 외 거래 시장입니다." },
     { category: "미국/해외주식", word: "나스닥 100", desc: "금융주를 제외하고 나스닥에 상장된 100개 우량 기술 기업의 주가를 모은 지수입니다." },
     { category: "미국/해외주식", word: "SCHD", desc: "재무가 탄탄하고 10년 이상 배당을 늘려온 미국 우량 기업에 투자하는 대표적인 배당 성장 ETF입니다." },
     { category: "미국/해외주식", word: "M7 (매그니피센트 7)", desc: "애플, MS, 아마존, 알파벳, 엔비디아, 메타, 테슬라 등 미국 증시를 이끄는 7대 빅테크 기업을 뜻합니다." },
@@ -93,40 +78,40 @@ function DictionaryContent() {
     { category: "미국/해외주식", word: "JEPI", desc: "주식 매도 옵션을 활용해 주가 변동성을 낮추고 높은 월배당금을 지급하는 커버드콜 전략의 ETF입니다." },
     { category: "미국/해외주식", word: "본장 & 프리마켓", desc: "미국 주식의 정규 거래 시간(본장)과 그 전후로 열리는 사전/사후 거래 시장을 말합니다." },
     { category: "미국/해외주식", word: "서머타임", desc: "미국의 낮 시간이 길어지는 기간 동안 주식 시장 개장과 마감 시간을 한 시간씩 앞당기는 제도입니다." },
-    { category: "미국/해외주식", word: "QQQ", desc: "나스닥 100 지수를 그대로 추종하는 세계적인 ETF입니다. 애플, 마이크로소프트 등 미국을 대표하는 100개 혁신 기술주에 한 번에 투자할 수 있는 가장 대중적인 상품입니다." },
-    { category: "지수/상품", word: "S&P 500", desc: "미국 우량 기업 500개의 주가를 모아 만든 지수입니다. 미국 경제의 실질적인 성적표이자 전 세계 투자의 가장 중요한 기준점(벤치마크)이 됩니다." },
-    { category: "지수/상품", word: "원자재 (Commodity)", desc: "석유, 금, 구리, 농산물 등 가공되지 않은 기초 상품입니다. 인플레이션 시기에 자산 가치를 방어하는 수단으로 많이 쓰입니다." },
-    { category: "지수/상품", word: "리츠 (REITs)", desc: "투자자들의 돈을 모아 부동산에 투자하고, 거기서 나오는 임대료 수익을 주주에게 배당으로 나눠주는 부동산 투자 전용 상품입니다." },
-    { category: "지수/상품", word: "공포-탐욕 지수 (Fear & Greed Index)", desc: "시장의 심리 상태를 0(극도의 공포)에서 100(극도의 탐욕)까지 숫자로 나타낸 지수입니다. 투자 시점을 결정할 때 참고하기 좋습니다." },
-    { category: "지수/상품", word: "채권 (Bond)", desc: "정부나 기업이 돈을 빌리기 위해 발행하는 차용증입니다. 주식보다 변동성이 낮고 정기적인 이자 수익을 기대할 수 있어 안전 자산으로 분류됩니다." },
-    { category: "지수/상품", word: "필라델피아 반도체 지수", desc: "엔비디아, 인텔 등 반도체 설계 및 제조 관련 글로벌 기업 30개의 성적을 합친 지수입니다." },
+    { category: "미국/해외주식", word: "QQQ", desc: "나스닥 100 지수를 그대로 추종하는 세계적인 ETF입니다." },
+    { category: "지수/상품", word: "S&P 500", desc: "미국 우량 기업 500개의 주가를 모아 만든 지수입니다. 미국 경제의 실질적인 성적표입니다." },
+    { category: "지수/상품", word: "원자재 (Commodity)", desc: "석유, 금, 구리, 농산물 등 가공되지 않은 기초 상품입니다." },
+    { category: "지수/상품", word: "리츠 (REITs)", desc: "투자자들의 돈을 모아 부동산에 투자하고, 임대료 수익을 주주에게 배당으로 나눠주는 상품입니다." },
+    { category: "지수/상품", word: "공포-탐욕 지수 (Fear & Greed Index)", desc: "시장의 심리 상태를 0(극도의 공포)에서 100(극도의 탐욕)까지 숫자로 나타낸 지수입니다." },
+    { category: "지수/상품", word: "채권 (Bond)", desc: "정부나 기업이 돈을 빌리기 위해 발행하는 차용증입니다. 안전 자산으로 분류됩니다." },
+    { category: "지수/상품", word: "필라델피아 반도체 지수", desc: "글로벌 반도체 설계 및 제조 관련 글로벌 기업 30개의 성적을 합친 지수입니다." },
     { category: "지수/상품", word: "VIX (공포지수)", desc: "시장의 불안감이 커질수록 수치가 올라가며, 향후 증시의 변동성을 예측하는 지표로 쓰입니다." },
     { category: "지수/상품", word: "나스닥100 레버리지 (TQQQ)", desc: "나스닥 100 지수의 하루 수익률을 3배로 추종하는 공격적인 투자 상품입니다." },
-    { category: "지수/상품", word: "S&P500 인버스 (SH)", desc: "지수가 하락할 때 수익이 나도록 설계된 상품으로, 시장 하락에 베팅하거나 위험을 방어할 때 쓰입니다." }
+    { category: "지수/상품", word: "S&P500 인버스 (SH)", desc: "지수가 하락할 때 수익이 나도록 설계된 상품입니다." }
   ];
 
   useEffect(() => {
     const cat = searchParams.get("cat");
-    if (cat && dictCategories.includes(cat)) {
-      setActiveCategory(cat);
-    }
+    const word = searchParams.get("word");
+    if (cat && dictCategories.includes(cat)) setActiveCategory(cat);
+    if (word) setSearchTerm(word);
   }, [searchParams]);
 
-  const filteredTerms = terms.filter(item => {
-    const matchesSearch = item.word.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.desc.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = activeCategory === "전체" || item.category === activeCategory;
-    return matchesSearch && matchesCategory;
-  }).sort((a, b) => a.word.localeCompare(b.word, 'ko'));
+  const filteredTerms = terms
+    .filter(item => {
+      const matchesSearch = item.word.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                           item.desc.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = activeCategory === "전체" || item.category === activeCategory;
+      return matchesSearch && matchesCategory;
+    })
+    .sort((a, b) => a.word.localeCompare(b.word, 'ko'));
 
   return (
-    <div className="min-h-screen font-sans transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
-
-      {/* --- 메인 콘텐츠 --- */}
+    <div className="min-h-screen transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
       <main className="max-w-5xl mx-auto px-5 py-12 md:py-20">
         <header className="mb-16 text-center md:text-left">
           <h1 className="text-5xl md:text-6xl font-black mb-10 tracking-tight italic uppercase" style={{ color: "var(--text-main)" }}>Dictionary</h1>
-          <div className="relative max-w-2xl mx-auto md:mx-0 group">
+          <div className="relative max-w-2xl mx-auto md:mx-0">
             <input
               type="text"
               placeholder="투자 용어를 검색하세요 (예: PER, 금리)"
@@ -137,16 +122,14 @@ function DictionaryContent() {
             />
           </div>
 
-          <div className="mt-12 mb-10">
-            <AdSense slot="1122334455" format="fluid" />
-          </div>
+          <div className="mt-12 mb-10"><AdSense slot="1122334455" format="fluid" /></div>
 
           <div className="flex flex-wrap gap-2 justify-center md:justify-start">
             {dictCategories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-8 py-3 rounded-2xl font-black text-sm transition-all ${activeCategory === cat ? "bg-red-600 text-white shadow-xl scale-105" : "border opacity-60 hover:opacity-100"}`}
+                className={`px-6 py-3 rounded-2xl font-black text-sm transition-all ${activeCategory === cat ? "bg-red-600 text-white shadow-xl scale-105" : "border opacity-60 hover:opacity-100"}`}
                 style={{ backgroundColor: activeCategory === cat ? "" : "var(--card-bg)", color: activeCategory === cat ? "#fff" : "var(--text-sub)", borderColor: "var(--border-color)" }}
               >
                 {cat}
@@ -156,15 +139,22 @@ function DictionaryContent() {
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredTerms.map((item, i) => (
-            <div key={i} className="p-8 rounded-[32px] border shadow-sm hover:shadow-2xl hover:border-red-500 transition-all group flex flex-col justify-between" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-              <div>
-                <span className="text-[11px] font-black text-red-600 mb-4 block uppercase tracking-[0.2em]">{item.category}</span>
-                <h4 className="font-black mb-4 text-2xl group-hover:text-red-600 transition-colors tracking-tight">{item.word}</h4>
-                <p className="text-[15px] font-bold opacity-70 leading-relaxed break-keep" style={{ color: "var(--text-sub)" }}>{item.desc}</p>
+          {filteredTerms.length > 0 ? (
+            filteredTerms.map((item, i) => (
+              <div key={i} className="p-8 rounded-[32px] border shadow-sm hover:shadow-2xl hover:border-red-500 transition-all group flex flex-col justify-between" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+                <div>
+                  <span className="text-[11px] font-black text-red-600 mb-4 block uppercase tracking-[0.2em]">{item.category}</span>
+                  <h4 className="font-black mb-4 text-2xl group-hover:text-red-600 transition-colors tracking-tight">{item.word}</h4>
+                  <p className="text-[15px] font-bold opacity-70 leading-relaxed break-keep" style={{ color: "var(--text-sub)" }}>{item.desc}</p>
+                </div>
               </div>
+            ))
+          ) : (
+            <div className="col-span-full py-20 text-center">
+              <p className="text-2xl font-black opacity-20 italic uppercase mb-4 text-red-600">No Terms Targeted</p>
+              <button onClick={() => {setSearchTerm(""); setActiveCategory("전체");}} className="font-bold border-b border-red-600">모든 용어 보기</button>
             </div>
-          ))}
+          )}
         </div>
 
         <div className="text-center mt-24">
@@ -177,9 +167,7 @@ function DictionaryContent() {
           <Link href="/privacy" className="hover:text-red-600 transition">개인정보 처리방침</Link>
           <Link href="/terms" className="hover:text-red-600 transition">이용약관</Link>
         </div>
-        <div className="text-[10px] font-bold tracking-[0.5em] uppercase opacity-40" style={{ color: "var(--text-sub)" }}>
-          © 2026 BULL'S EYE. ALL RIGHTS RESERVED.
-        </div>
+        <div className="text-[10px] font-bold tracking-[0.5em] uppercase opacity-40" style={{ color: "var(--text-sub)" }}>© 2026 BULL'S EYE. ALL RIGHTS RESERVED.</div>
       </footer>
     </div>
   );

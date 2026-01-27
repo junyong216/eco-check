@@ -5,7 +5,6 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import DarkModeToggle from "@/components/DarkModeToggle";
 
-// --- 공통 데이터 관리 ---
 const newsCategories = [
   { id: "market", name: "시장지표", query: "시장지표" },
   { id: "interest", name: "금리이슈", query: "금리전망" },
@@ -35,7 +34,6 @@ export default function Navbar() {
     <nav className="h-16 border-b flex items-center justify-between px-4 md:px-8 sticky top-0 z-[300] transition-colors shadow-sm"
       style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
 
-      {/* 로고 & 다크모드 */}
       <div className="flex items-center gap-4">
         <Link href="/" className="font-black text-xl md:text-2xl text-red-600 tracking-tighter italic">
           BULL'S EYE
@@ -43,20 +41,16 @@ export default function Navbar() {
         <DarkModeToggle />
       </div>
 
-      {/* 메뉴 영역 */}
       <div className="flex items-center h-full">
-        {/* [PC] 상단 가로 메뉴 */}
-        {/* font-black을 font-bold로 낮추고, 가독성을 위해 자간(tracking-tight)을 조정했습니다 */}
         <div className="hidden lg:flex items-center h-full gap-8 mr-6 font-bold text-[15px] tracking-tight">
 
-          {/* 뉴스 드롭다운 */}
+          {/* 뉴스 */}
           <div className="relative h-full flex items-center"
             onMouseEnter={() => setOpenDropdown('news')} onMouseLeave={() => setOpenDropdown(null)}>
             <span className="flex items-center gap-1 cursor-pointer transition-colors"
               style={{ color: openDropdown === 'news' ? '#dc2626' : 'var(--text-main)' }}>
               뉴스 <span className={`text-[10px] transition-transform ${openDropdown === 'news' ? 'rotate-180' : ''}`}>▼</span>
             </span>
-            {/* 드롭다운 내부 글씨체를 모바일과 같은 font-medium으로 통일 */}
             <div className={`absolute top-16 left-1/2 -translate-x-1/2 w-48 py-2 rounded-2xl border shadow-2xl transition-all ${openDropdown === 'news' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible translate-y-2'}`}
               style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
               <Link href="/news" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 text-[14px] font-medium" style={{ color: "var(--text-main)" }}>뉴스 홈</Link>
@@ -67,7 +61,7 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* 증권 드롭다운 */}
+          {/* 증권 */}
           <div className="relative h-full flex items-center"
             onMouseEnter={() => setOpenDropdown('stock')} onMouseLeave={() => setOpenDropdown(null)}>
             <span className="flex items-center gap-1 cursor-pointer transition-colors"
@@ -81,7 +75,7 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* 용어사전 드롭다운 */}
+          {/* 용어사전 */}
           <div className="relative h-full flex items-center"
             onMouseEnter={() => setOpenDropdown('dict')} onMouseLeave={() => setOpenDropdown(null)}>
             <span className="flex items-center gap-1 cursor-pointer transition-colors"
@@ -97,7 +91,7 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* 추천 드롭다운 */}
+          {/* 추천 */}
           <div className="relative h-full flex items-center"
             onMouseEnter={() => setOpenDropdown('recommend')} onMouseLeave={() => setOpenDropdown(null)}>
             <span className="flex items-center gap-1 cursor-pointer transition-colors"
@@ -110,9 +104,34 @@ export default function Navbar() {
               <Link href="/recommend?tab=videos" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 text-[14px] font-medium" style={{ color: "var(--text-main)" }}>추천 영상</Link>
             </div>
           </div>
+
+          {/* 투자가이드 - 원본 그대로 복구 */}
+          <div className="relative h-full flex items-center"
+            onMouseEnter={() => setOpenDropdown('guide')} onMouseLeave={() => setOpenDropdown(null)}>
+            <span className="flex items-center gap-1 cursor-pointer transition-colors"
+              style={{ color: openDropdown === 'guide' ? '#dc2626' : 'var(--text-main)' }}>
+              투자가이드 <span className={`text-[10px] transition-transform ${openDropdown === 'guide' ? 'rotate-180' : ''}`}>▼</span>
+            </span>
+            <div className={`absolute top-16 left-1/2 -translate-x-1/2 w-48 py-2 rounded-2xl border shadow-2xl transition-all ${openDropdown === 'guide' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible translate-y-2'}`}
+              style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+              <Link href="/guide" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 text-[14px] font-medium" style={{ color: "var(--text-main)" }}>투자가이드</Link>
+            </div>
+          </div>
+
+          {/* 설정 - 군더더기 없이 '환경설정'만 포함 */}
+          <div className="relative h-full flex items-center"
+            onMouseEnter={() => setOpenDropdown('settings')} onMouseLeave={() => setOpenDropdown(null)}>
+            <span className="flex items-center gap-1 cursor-pointer transition-colors"
+              style={{ color: openDropdown === 'settings' ? '#dc2626' : 'var(--text-main)' }}>
+              설정 <span className={`text-[10px] transition-transform ${openDropdown === 'settings' ? 'rotate-180' : ''}`}>▼</span>
+            </span>
+            <div className={`absolute top-16 left-1/2 -translate-x-1/2 w-48 py-2 rounded-2xl border shadow-2xl transition-all ${openDropdown === 'settings' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible translate-y-2'}`}
+              style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+              <Link href="/settings" className="block px-5 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 text-[14px] font-medium" style={{ color: "var(--text-main)" }}>환경설정</Link>
+            </div>
+          </div>
         </div>
 
-        {/* 햄버거 버튼 */}
         <button onClick={() => setIsFullMenuOpen(!isFullMenuOpen)} className="w-10 h-10 flex flex-col justify-center items-center gap-1.5 focus:outline-none z-[310]">
           <div className={`w-6 h-0.5 transition-all ${isFullMenuOpen ? 'rotate-45 translate-y-2' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
           <div className={`w-6 h-0.5 transition-all ${isFullMenuOpen ? 'opacity-0' : ''}`} style={{ backgroundColor: "var(--text-main)" }}></div>
@@ -120,7 +139,6 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* 전체 메뉴 레이어 (모든 텍스트 font-medium 통일) */}
       <AnimatePresence>
         {isFullMenuOpen && (
           <>
@@ -131,8 +149,7 @@ export default function Navbar() {
               className="fixed inset-x-0 top-16 z-[250] overflow-hidden shadow-2xl border-b"
               style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
 
-              <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 p-10">
-                {/* 뉴스 섹션 */}
+              <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-6 gap-8 p-10">
                 <div>
                   <div className="text-red-600 font-black text-xs mb-4 border-b border-red-600 pb-2 uppercase tracking-widest">뉴스</div>
                   <div className="flex flex-col gap-3 text-[14px]">
@@ -144,7 +161,6 @@ export default function Navbar() {
                   </div>
                 </div>
 
-                {/* 증권 섹션 */}
                 <div>
                   <div className="text-red-600 font-black text-xs mb-4 border-b border-red-600 pb-2 uppercase tracking-widest">증권</div>
                   <div className="flex flex-col gap-3 text-[14px]">
@@ -153,7 +169,6 @@ export default function Navbar() {
                   </div>
                 </div>
 
-                {/* 용어사전 섹션 */}
                 <div>
                   <div className="text-red-600 font-black text-xs mb-4 border-b border-red-600 pb-2 uppercase tracking-widest">용어사전</div>
                   <div className="flex flex-col gap-3 text-[14px]">
@@ -164,7 +179,6 @@ export default function Navbar() {
                   </div>
                 </div>
 
-                {/* 추천 섹션 */}
                 <div>
                   <div className="text-red-600 font-black text-xs mb-4 border-b border-red-600 pb-2 uppercase tracking-widest">추천</div>
                   <div className="flex flex-col gap-3 text-[14px]">
@@ -172,6 +186,20 @@ export default function Navbar() {
                       <Link key={tab.slug} href={`/recommend?tab=${tab.slug}`} onClick={closeMenu}
                         className="font-medium hover:text-red-600" style={{ color: "var(--text-main)" }}>{tab.name}</Link>
                     ))}
+                  </div>
+                </div>
+
+                <div>
+                  <div className="text-red-600 font-black text-xs mb-4 border-b border-red-600 pb-2 uppercase tracking-widest">투자가이드</div>
+                  <div className="flex flex-col gap-3 text-[14px]">
+                    <Link href="/guide" onClick={closeMenu} className="font-medium hover:text-red-600" style={{ color: "var(--text-main)" }}>투자가이드</Link>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="text-red-600 font-black text-xs mb-4 border-b border-red-600 pb-2 uppercase tracking-widest">설정</div>
+                  <div className="flex flex-col gap-3 text-[14px]">
+                    <Link href="/settings" onClick={closeMenu} className="font-medium hover:text-red-600" style={{ color: "var(--text-main)" }}>환경설정</Link>
                   </div>
                 </div>
               </div>
