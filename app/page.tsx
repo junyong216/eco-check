@@ -515,10 +515,15 @@ export default function Home() {
               BULL'S EYE는 복잡한 금융 데이터를 한눈에 꿰뚫는 투자 가이드입니다. 데이터의 정곡을 찔러 귀하의 자산이 목표점에 도달하도록 지원합니다.
             </p>
           </div>
-          <div className="md:text-right flex flex-col md:items-end gap-2">
-            <div className="text-[10px] font-black uppercase tracking-widest text-red-600">Contact</div>
-            <div className="text-lg font-black">운영자 정준용</div>
-            <a href="mailto:jjyong3872@naver.com" className="font-black hover:text-red-600 transition-colors">jjyong3872@naver.com</a>
+          <div className="md:text-right flex flex-col md:items-end gap-1.5">
+            <div className="text-[10px] font-black uppercase tracking-[0.2em] text-red-600 mb-1">Contact</div>
+
+            {/* 상호명과 대표자를 한 줄로 묶거나 간격을 미세하게 조정 */}
+            <div className="flex flex-col md:items-end">
+              <span className="text-sm font-black tracking-tight mb-0.5">제이투코어 (J2CORE)</span>
+              <span className="text-[11px] font-bold opacity-70">대표자 | 정준용</span>
+            </div>
+            <a href="mailto:jjyong3872@naver.com" className="text-[11px] font-bold text-red-600/80 hover:text-red-600 transition-colors">jjyong3872@naver.com</a>
           </div>
         </div>
         <div className="text-center pt-8 border-t border-white/5 opacity-30 text-[10px] font-bold tracking-[0.4em]">
