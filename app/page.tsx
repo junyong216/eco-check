@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react"; // ✅ useRef 통합
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion"; // ✅ AnimatePresence 추가
 import AdSense from "@/components/AdSense";
 
 const fadeInUp = {
@@ -17,7 +17,13 @@ const staggerContainer = {
   whileInView: { transition: { staggerChildren: 0.15 } }
 } as const;
 
-// ✅ 1. 상단용 투자 명언 데이터
+// ✅ 연관검색어 데이터베이스
+const stockKeywords = [
+  "삼성전자", "SK하이닉스", "LG에너지솔루션", "삼성바이오로직스", "현대차", "기아", "셀트리온", "POSCO홀딩스", "NAVER", "카카오",
+  "엔비디아", "테슬라", "애플", "마이크로소프트", "구글", "아마존", "메타", "비트코인", "이더리움", "리플",
+  "미국증시", "코스피", "코스닥", "금리전망", "환율", "유가", "금 시세"
+];
+
 const topQuotes = [
   { text: "투자란 원금의 안전과 만족스러운 수익을 약속하는 것이다.", author: "Benjamin Graham" },
   { text: "인내심은 주식 시장에서 승리하기 위한 가장 강력한 무기다.", author: "Warren Buffett" },
@@ -30,11 +36,14 @@ const topQuotes = [
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [suggestions, setSuggestions] = useState<string[]>([]); // ✅ 추가
+  const [showSuggestions, setShowSuggestions] = useState(false); // ✅ 추가
+  const searchRef = useRef<HTMLDivElement>(null); // ✅ 추가
+  
   const [isLoading, setIsLoading] = useState(true);
   const [exchangeRate, setExchangeRate] = useState({ rate: "---", change: "+0.0" });
   const [fearGreed, setFearGreed] = useState({ value: 0, label: "로딩 중" });
 
-  // ✅ 설정 및 새로운 기능 상태들
   const [isGuideFirst, setIsGuideFirst] = useState(false);
   const [showMarketData, setShowMarketData] = useState(true);
   const [mounted, setMounted] = useState(false);
@@ -42,7 +51,6 @@ export default function Home() {
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
 
   useEffect(() => {
-    // 설정값 로드
     const savedMarketAlert = localStorage.getItem("marketAlert");
     const savedGuideSetting = localStorage.getItem("newsLetter") === "true";
     const savedSearches = JSON.parse(localStorage.getItem("recentSearches") || "[]");
@@ -50,13 +58,37 @@ export default function Home() {
     setShowMarketData(savedMarketAlert !== "false");
     setIsGuideFirst(savedGuideSetting);
     setRecentSearches(savedSearches);
-
-    // 랜덤 명언 선정
     setDailyQuote(topQuotes[Math.floor(Math.random() * topQuotes.length)]);
 
     fetchMarketData();
     setMounted(true);
+
+    // ✅ 외부 클릭 시 연관검색어 창 닫기
+    const handleClickOutside = (e: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // ✅ 실시간 검색어 입력 핸들러
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+
+    if (value.trim().length > 0) {
+      const filtered = stockKeywords
+        .filter(item => item.toLowerCase().includes(value.toLowerCase()))
+        .slice(0, 5); 
+      setSuggestions(filtered);
+      setShowSuggestions(true);
+    } else {
+      setSuggestions([]);
+      setShowSuggestions(false);
+    }
+  };
 
   const fetchMarketData = async () => {
     setIsLoading(true);
@@ -86,23 +118,21 @@ export default function Home() {
     }
   };
 
-  // ✅ 검색 실행 및 검색어 저장 로직
   const executeSearch = (e?: React.FormEvent, term?: string) => {
     if (e) e.preventDefault();
     const query = term || searchTerm;
     if (!query.trim()) return;
 
-    // 최근 검색어 업데이트 (중복 제거, 최대 5개)
     const updated = [query, ...recentSearches.filter(s => s !== query)].slice(0, 5);
     setRecentSearches(updated);
     localStorage.setItem("recentSearches", JSON.stringify(updated));
+    setShowSuggestions(false); // ✅ 검색 실행 시 창 닫기
 
     window.open(`https://search.naver.com/search.naver?query=${encodeURIComponent(query + " 주가")}`, "_blank");
   };
 
-  // ✅ 검색어 개별 삭제
   const removeSearch = (e: React.MouseEvent, term: string) => {
-    e.stopPropagation(); // 부모 버튼 클릭 방지
+    e.stopPropagation();
     const updated = recentSearches.filter(s => s !== term);
     setRecentSearches(updated);
     localStorage.setItem("recentSearches", JSON.stringify(updated));
@@ -124,11 +154,9 @@ export default function Home() {
 
   return (
     <div className="min-h-[100dvh] flex flex-col transition-colors duration-300" style={{ backgroundColor: "var(--bg-color)", color: "var(--text-main)" }}>
-
-      {/* 1. 상단 패딩 수정: py-8 -> pt-4, md:py-24 -> md:pt-12 */}
       <main className="max-w-6xl mx-auto px-4 pt-4 md:pt-12 pb-8 md:pb-24 relative z-10">
 
-        {/* ✅ 1번 기능: 상단 명언 위젯 (마진 수정: mb-12 -> mb-6 md:mb-10) */}
+        {/* 상단 명언 위젯 */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-6 md:mb-10 text-center px-4">
           <span className="text-[10px] font-black uppercase tracking-[0.3em] text-red-600 block mb-2">🎯Today's Insight</span>
           <p className="text-base md:text-xl font-bold italic opacity-90 mb-1">"{dailyQuote.text}"</p>
@@ -145,37 +173,59 @@ export default function Home() {
           <div className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-105"
             style={{ backgroundImage: `url('/hero-bg.png')`, filter: "blur(2px) brightness(0.4)" }} />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-white mb-4 md:mb-6 tracking-tighter italic uppercase"
-            >
+            <motion.h2 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-white mb-4 md:mb-6 tracking-tighter italic uppercase">
               HIT THE <br />
               <span className="text-red-600 inline-block mt-2">Bull's Eye</span>
             </motion.h2>
           </div>
         </motion.section>
 
-        {/* 통합 검색창 */}
-        <div className="max-w-2xl mx-auto mb-16 md:mb-28 px-2">
-          <form onSubmit={(e) => executeSearch(e)} className="relative group mb-8">
+        {/* ✅ 통합 검색창 (연관검색어 기능 탑재) */}
+        <div className="max-w-2xl mx-auto mb-16 md:mb-28 px-2 relative" ref={searchRef}>
+          <form onSubmit={(e) => executeSearch(e)} className="relative group mb-8 z-30">
             <input
               type="text"
               placeholder="종목명 또는 지표 검색"
               className="w-full h-14 md:h-20 px-6 md:px-10 rounded-full border-2 focus:border-red-600 shadow-xl transition-all outline-none text-sm md:text-base font-bold"
               style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", color: "var(--text-main)" }}
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={handleInputChange} // ✅ 실시간 필터링 적용
+              onFocus={() => searchTerm.trim() && setShowSuggestions(true)}
             />
             <button type="submit" className="absolute right-2 top-2 bottom-2 px-6 md:px-10 bg-red-600 text-white rounded-full font-black hover:bg-red-700 transition-all hover:scale-95">
               검색
             </button>
           </form>
 
-          {/* ✅ 2번 기능: 최근 검색어 (삭제 기능 포함) */}
+          {/* ✅ 연관검색어 드롭다운 레이어 */}
+          <AnimatePresence>
+            {showSuggestions && suggestions.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="absolute top-16 md:top-24 left-0 right-0 z-20 rounded-[24px] border-2 shadow-2xl overflow-hidden mt-2"
+                style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}
+              >
+                {suggestions.map((item, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      setSearchTerm(item);
+                      executeSearch(undefined, item);
+                    }}
+                    className="w-full text-left px-8 py-4 hover:bg-red-600/10 hover:text-red-600 font-bold transition-colors border-b last:border-none text-sm md:text-base"
+                    style={{ borderColor: "var(--border-color)" }}
+                  >
+                    🔍 <span className="ml-2">{item}</span>
+                  </button>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* 최근 검색어 */}
           <div className="flex flex-wrap justify-center gap-2 md:gap-3">
             {recentSearches.length > 0 ? (
               recentSearches.map((tag) => (
@@ -187,7 +237,7 @@ export default function Home() {
                   >
                     # {tag}
                   </button>
-                  <button
+                  <button 
                     onClick={(e) => removeSearch(e, tag)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 flex items-center justify-center rounded-full bg-red-600/10 text-red-600 hover:bg-red-600 hover:text-white transition-all text-[8px]"
                   >
@@ -201,7 +251,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* 지표 데이터 섹션 */}
+        {/* 지표 데이터 및 나머지 하단 섹션 (기존 코드 유지) */}
         {showMarketData && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
             {isLoading ? (
@@ -233,7 +283,6 @@ export default function Home() {
 
         <div className="my-10"><AdSense slot="1234567890" format="fluid" /></div>
 
-        {/* 메인 버튼 */}
         <motion.div variants={staggerContainer} initial="initial" whileInView="whileInView" className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 mb-20">
           {sortedButtons.map((item) => (
             <motion.div key={item.id} variants={fadeInUp}>
