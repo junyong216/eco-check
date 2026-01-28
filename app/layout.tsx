@@ -2,9 +2,10 @@ import "./globals.css";
 import { Noto_Sans_KR } from "next/font/google";
 import { Metadata, Viewport } from "next";
 import Navbar from "@/components/Navbar";
+import Script from "next/script";
 
 // 1. variable 설정을 추가하여 CSS와 연동을 강화합니다.
-const notoSanKR = Noto_Sans_KR({ 
+const notoSanKR = Noto_Sans_KR({
   subsets: ["latin"],
   weight: ["400", "500", "700", "900"],
   variable: "--font-noto-sans-kr", // CSS 변수 선언
@@ -57,14 +58,24 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko" suppressHydrationWarning className={notoSanKR.variable}>
+      <head>
+        {/* 2. 구글 애드센스 승인 코드 삽입 */}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3737116795159579"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+      </head>
       <body className={notoSanKR.className}>
         <div className="flex flex-col min-h-screen">
-          <Navbar /> 
+          <Navbar />
           <main className="flex-grow">
             {children}
           </main>
         </div>
 
+        {/* 서비스 워커 스크립트 */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
