@@ -23,7 +23,7 @@ const stockKeywords = [
   "삼성전자", "SK하이닉스", "LG에너지솔루션", "삼성바이오로직스", "현대차", "기아", "셀트리온", "POSCO홀딩스", "NAVER", "카카오",
   "삼성SDI", "LG화학", "KB금융", "신한지주", "포스코퓨처엠", "에코프로", "에코프로비엠", "현대모비스", "삼성물산", "카카오뱅크",
   "SK이노베이션", "LG전자", "두산에너빌리티", "HMM", "크래프톤", "메리츠금융지주", "HD현대중공업", "한화오션", "대한항공", "포스코인터내셔널",
-  
+
   // --- 미장 (USA - Big Tech & Growth) ---
   "엔비디아", "테슬라", "애플", "마이크로소프트", "구글", "아마존", "메타", "넷플릭스", "어도비", "세일즈포스",
   "AMD", "인텔", "퀄컴", "브로드컴", "ASML", "TSMC", "팔란티어", "아이온큐", "유니티", "코인베이스",
@@ -57,7 +57,7 @@ export default function Home() {
   const [suggestions, setSuggestions] = useState<string[]>([]); // ✅ 추가
   const [showSuggestions, setShowSuggestions] = useState(false); // ✅ 추가
   const searchRef = useRef<HTMLDivElement>(null); // ✅ 추가
-  
+
   const [isLoading, setIsLoading] = useState(true);
   const [exchangeRate, setExchangeRate] = useState({ rate: "---", change: "+0.0" });
   const [fearGreed, setFearGreed] = useState({ value: 0, label: "로딩 중" });
@@ -99,7 +99,8 @@ export default function Home() {
     if (value.trim().length > 0) {
       const filtered = stockKeywords
         .filter(item => item.toLowerCase().includes(value.toLowerCase()))
-        .slice(0, 5); 
+        .sort()
+        .slice(0, 10);
       setSuggestions(filtered);
       setShowSuggestions(true);
     } else {
@@ -255,7 +256,7 @@ export default function Home() {
                   >
                     # {tag}
                   </button>
-                  <button 
+                  <button
                     onClick={(e) => removeSearch(e, tag)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 flex items-center justify-center rounded-full bg-red-600/10 text-red-600 hover:bg-red-600 hover:text-white transition-all text-[8px]"
                   >
