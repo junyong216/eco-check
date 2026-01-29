@@ -486,8 +486,8 @@ function StockContent() {
                       strokeWidth="3"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      /* ✅ 아래 className을 추가해서 색상을 명시적으로 잡아줍니다 */
-                      className="text-slate-600 dark:text-slate-300 group-hover:text-white"
+                      /* ✅ 느낌표(!)를 붙여서 모바일 강제 설정을 무시합니다 */
+                      className="!text-slate-600 dark:!text-slate-300 group-hover:!text-white"
                     >
                       <path d="M7 17L17 7M17 7H7M17 7V17" />
                     </svg>
