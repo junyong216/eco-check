@@ -429,9 +429,10 @@ function StockContent() {
                     <span onClick={() => handleSearch(term)} className="font-black mr-3 text-sm tracking-tight">{term}</span>
                     <button
                       onClick={() => removeFromList(term)}
-                      className="w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 text-[10px] font-black text-slate-500 dark:text-white hover:bg-red-500 hover:text-white transition"
+                      /* ✅ 메인 페이지와 동일한 로직: bg-red-600/10와 명시적 text 컬러 사용 */
+                      className="w-6 h-6 ml-2 flex items-center justify-center rounded-full bg-red-600/10 text-red-600 hover:bg-red-600 hover:text-white transition-all text-[10px] font-black"
                     >
-                      ✕
+                      <span className="leading-none" style={{ color: 'inherit' }}>✕</span>
                     </button>
                   </div>
                 ))}
@@ -486,8 +487,8 @@ function StockContent() {
                       strokeWidth="3"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      /* ✅ 느낌표(!)를 붙여서 모바일 강제 설정을 무시합니다 */
-                      className="!text-slate-600 dark:!text-slate-300 group-hover:!text-white"
+                      /* ✅ 핵심 수정: ! (중요도 최고) 기호를 붙여 모바일 브라우저의 강제 색상 지정을 무시합니다 */
+                      className="!text-slate-600 dark:!text-white group-hover:!text-white"
                     >
                       <path d="M7 17L17 7M17 7H7M17 7V17" />
                     </svg>
