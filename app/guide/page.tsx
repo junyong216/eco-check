@@ -34,11 +34,18 @@ export default function GuidePage() {
           {investorGuides.map((guide) => (
             <div key={guide.id} className="flex flex-col">
               <Link href={`/guide/${guide.id}`} className="group cursor-pointer">
-                <div className="aspect-video mb-6 overflow-hidden rounded-[32px] border-2 transition-all group-hover:border-red-600 group-hover:shadow-2xl flex items-center justify-center relative bg-white dark:bg-black"
-                  style={{ borderColor: "var(--border-color)" }}>
+                <div className="aspect-video mb-6 overflow-hidden rounded-[32px] border-2 transition-all group-hover:border-red-600 group-hover:shadow-2xl flex items-center justify-center relative"
+                  style={{
+                    backgroundColor: "var(--card-bg)",
+                    borderColor: "var(--border-color)"
+                  }}>
 
-                  {/* PC와 동일한 설정: 평소엔 레드, 다크모드엔 화이트 */}
-                  <div className="font-black text-3xl italic uppercase tracking-tighter transition-all text-red-600 dark:text-white opacity-20 group-hover:opacity-100">
+                  {/* 카드 안의 큰 태그 글씨 */}
+                  <div className="font-black text-3xl italic uppercase tracking-tighter transition-all opacity-20 group-hover:opacity-100"
+                    style={{
+                      // 이 한 줄이 핵심입니다. CSS 변수를 직접 박아서 PC/모바일 강제 통일!
+                      color: "var(--accent-color)"
+                    }}>
                     {guide.tag}
                   </div>
 
