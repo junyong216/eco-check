@@ -220,6 +220,7 @@ function StockContent() {
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState<{ name: string, alias: string[] }[]>([]);
   const [myList, setMyList] = useState<string[]>([]);
+  const [selectedIndex, setSelectedIndex] = useState(-1); // 키보드 선택 위치 저장
   const [activeTab, setActiveTab] = useState("brokers");
   const [lastUpdated, setLastUpdated] = useState<string>("");
 
@@ -242,6 +243,31 @@ function StockContent() {
     setSuggestions(filtered);
   }, [searchTerm]);
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (suggestions.length === 0) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault(); // 스크롤 방지
+      setSelectedIndex((prev) => (prev < suggestions.length - 1 ? prev + 1 : prev));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setSelectedIndex((prev) => (prev > 0 ? prev - 1 : prev));
+    } else if (e.key === "Enter") {
+      if (selectedIndex >= 0) {
+        e.preventDefault();
+        handleSelectSuggestion(suggestions[selectedIndex].name);
+      }
+    } else if (e.key === "Escape") {
+      setSuggestions([]);
+      setSelectedIndex(-1);
+    }
+  };
+
+  // 검색어 바뀔 때마다 선택 초기화 (자동완성 필터링 useEffect 안에 넣어도 됨)
+  useEffect(() => {
+    setSelectedIndex(-1);
+  }, [searchTerm]);
+
   const fetchStockIndices = async () => {
     try {
       // 1. 앱(정적 추출) 환경에서는 내부 API를 못 쓰므로 외부 프록시(allorigins)를 활용합니다.
@@ -255,7 +281,7 @@ function StockContent() {
 
       const kRaw = await kRes.json();
       const nRaw = await nRes.json();
-      
+
       // allorigins는 응답을 'contents'라는 문자열에 담아주므로 JSON.parse가 필요합니다.
       const kData = JSON.parse(kRaw.contents);
       const nData = JSON.parse(nRaw.contents);
@@ -267,7 +293,7 @@ function StockContent() {
         const prev = meta.chartPreviousClose || meta.previousClose || price;
         const diff = price - prev;
         const percent = prev !== 0 ? (diff / prev) * 100 : 0;
-        
+
         return {
           price: price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
           change: (diff > 0 ? "+" : "") + diff.toFixed(2),
@@ -319,6 +345,13 @@ function StockContent() {
     localStorage.setItem("ecoCheck_myList", JSON.stringify(newList));
   };
 
+  const clearAllList = () => {
+    if (window.confirm("관심 종목 리스트를 모두 비우시겠습니까?")) {
+      setMyList([]);
+      localStorage.removeItem("ecoCheck_myList");
+    }
+  };
+
   const handleSearch = (term: string) => {
     window.open(`https://search.naver.com/search.naver?query=${encodeURIComponent(term + " 주가")}`, "_blank");
   };
@@ -332,8 +365,12 @@ function StockContent() {
           <div className="relative max-w-2xl group mb-10">
             <form onSubmit={(e) => {
               e.preventDefault();
-              if (suggestions.length > 0) handleSelectSuggestion(suggestions[0].name);
-              else if (searchTerm.trim()) handleSelectSuggestion(searchTerm.trim());
+              // suggestions가 있고 선택된 게 있다면 그걸 추가, 아니면 현재 입력값 추가
+              if (selectedIndex >= 0 && suggestions[selectedIndex]) {
+                handleSelectSuggestion(suggestions[selectedIndex].name);
+              } else if (searchTerm.trim()) {
+                handleSelectSuggestion(searchTerm.trim());
+              }
             }}>
               <input
                 type="text"
@@ -342,10 +379,13 @@ function StockContent() {
                 style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)", color: "var(--text-main)" }}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyDown={handleKeyDown} // 키보드 핸들러 연결
                 autoComplete="off"
               />
-              <button type="submit" className="absolute right-2 top-2 h-12 px-5 md:px-8 bg-red-600 text-white rounded-xl font-black hover:bg-red-700 transition text-sm md:text-base">ADD</button>
-            </form>
+              <button type="submit" className="absolute right-2 top-2 h-12 px-5 md:px-8 bg-red-600 text-white rounded-xl font-black hover:bg-red-700 transition text-sm md:text-base">
+                ADD
+              </button>
+            </form> {/* ✅ 여기서 폼을 닫아줘야 합니다! */}
 
             {/* 자동완성 레이어 */}
             {suggestions.length > 0 && (
@@ -354,9 +394,12 @@ function StockContent() {
                 {suggestions.map((s, i) => (
                   <div key={i}
                     onClick={() => handleSelectSuggestion(s.name)}
-                    className="px-6 py-4 flex justify-between items-center cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors border-b last:border-0"
+                    className={`px-6 py-4 flex justify-between items-center cursor-pointer transition-colors border-b last:border-0
+            ${selectedIndex === i ? "bg-red-50 dark:bg-red-900/40" : "hover:bg-red-50 dark:hover:bg-red-900/20"}`}
                     style={{ borderColor: "var(--border-color)" }}>
-                    <span className="font-black text-sm">{s.name}</span>
+                    <span className={`font-black text-sm ${selectedIndex === i ? "text-red-600 dark:text-red-400" : ""}`}>
+                      {s.name}
+                    </span>
                     <span className="text-[10px] font-bold opacity-40 uppercase">{s.alias[0]}</span>
                   </div>
                 ))}
@@ -367,13 +410,32 @@ function StockContent() {
           <div className="my-10"><AdSense slot="9988776655" format="auto" /></div>
 
           {myList.length > 0 && (
-            <div className="mt-8 flex flex-wrap gap-3">
-              {myList.map((term, i) => (
-                <div key={i} className="flex items-center border-2 rounded-xl pl-5 pr-2 py-2 hover:border-red-600 transition group cursor-pointer" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
-                  <span onClick={() => handleSearch(term)} className="font-black mr-3 text-sm tracking-tight">{term}</span>
-                  <button onClick={() => removeFromList(term)} className="w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 text-[10px] font-black hover:bg-red-500 hover:text-white transition">✕</button>
-                </div>
-              ))}
+            <div className="mt-10">
+              {/* 헤더 부분: 타이틀과 전체삭제 버튼 */}
+              <div className="flex justify-between items-center mb-4 px-1">
+                <span className="text-[10px] font-black text-red-600/60 uppercase tracking-widest">My Watchlist</span>
+                <button
+                  onClick={clearAllList}
+                  className="text-[10px] font-black opacity-40 hover:opacity-100 hover:text-red-600 transition uppercase underline underline-offset-4"
+                >
+                  전체삭제
+                </button>
+              </div>
+
+              {/* 기존 종목 칩(Chip) 리스트 */}
+              <div className="flex flex-wrap gap-3">
+                {myList.map((term, i) => (
+                  <div key={i} className="flex items-center border-2 rounded-xl pl-5 pr-2 py-2 hover:border-red-600 transition group cursor-pointer" style={{ backgroundColor: "var(--card-bg)", borderColor: "var(--border-color)" }}>
+                    <span onClick={() => handleSearch(term)} className="font-black mr-3 text-sm tracking-tight">{term}</span>
+                    <button
+                      onClick={() => removeFromList(term)}
+                      className="w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 text-[10px] font-black text-slate-500 dark:text-white hover:bg-red-500 hover:text-white transition"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </header>
@@ -415,7 +477,20 @@ function StockContent() {
                     <p className="text-[10px] font-bold opacity-50 uppercase">{b.desc}</p>
                   </div>
                   <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:bg-red-600 group-hover:text-white transition-all transform group-hover:rotate-45">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17" /></svg>
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      /* ✅ 아래 className을 추가해서 색상을 명시적으로 잡아줍니다 */
+                      className="text-slate-600 dark:text-slate-300 group-hover:text-white"
+                    >
+                      <path d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
                   </div>
                 </a>
                 {(i + 1) % 6 === 0 && <div className="col-span-full my-4"><AdSense slot="4433221100" format="fluid" /></div>}
