@@ -483,9 +483,9 @@ function StockContent() {
                       backgroundColor: 'var(--circle-color)'
                     }}
                   >
-                    <style jsx>{`/* 시스템 다크모드 필터를 무력화하기 위한 내부 변수 설정 *
-                    /div { --circle-color: #f1f5f9; --arrow-color: #475569; }:global(.dark) 
-                    div { --circle-color: #1e293b; --arrow-color: #ffffff; }
+                    <style jsx>{`/* 시스템 다크모드 필터를 무력화하기 위한 내부 변수 설정 */
+                    div { --circle-color: #f1f5f9; --arrow-color: #475569; }
+                    :global(.dark) div { --circle-color: #1e293b; --arrow-color: #ffffff; }
                     div:hover { --arrow-color: #ffffff; }`}
                     </style>
                     <svg
