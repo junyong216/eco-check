@@ -491,8 +491,12 @@ function StockContent() {
                     >
                       <path
                         d="M7 17L17 7M17 7H7M17 7V17"
-                        /* ✅ 여기에 직접 stroke 색상을 명시하면 모바일이 거부 못 합니다 */
-                        className="!stroke-slate-600 dark:!stroke-slate-300 group-hover:!stroke-white"
+                        /* 1. 기본 stroke를 명시 (fallback) */
+                        stroke="#475569"
+                        /* 2. Tailwind 클래스로 상황별 색상 강제 지정 */
+                        className="!stroke-slate-600 dark:!stroke-slate-300 group-hover:!stroke-white transition-colors"
+                        /* 3. 인라인 스타일로 상속 원천 차단 */
+                        style={{ stroke: 'inherit' }}
                       />
                     </svg>
                   </div>
