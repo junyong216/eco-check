@@ -67,7 +67,7 @@ export default function GuidePage() {
         </div>
 
         <div className="text-center mt-32 pb-12">
-          <Link href="/" className="inline-block px-12 py-5 bg-red-600 text-white rounded-full font-black text-lg hover:bg-red-700 transition shadow-2xl hover:-translate-y-1">메인으로 돌아가기</Link>
+          <Link href="/" className="inline-block px-12 py-5 bg-red-600 text-white rounded-full font-black text-lg hover:bg-red-700 transition shadow-2xl hover:-translate-y-1">홈으로 돌아가기</Link>
         </div>
       </main>
     </div>
